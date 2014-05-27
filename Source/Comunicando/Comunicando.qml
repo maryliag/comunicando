@@ -21,17 +21,10 @@ Rectangle {
 
     }
 
-    ListView {
-        width: 920
-        height: 300
-        anchors.centerIn: parent
-        highlightFollowsCurrentItem: true
-        model: AcaoModel {}
-        orientation: ListView.Horizontal
-        snapMode: ListView.SnapOneItem
-        spacing: 10
-        focus: true
-        delegate: Row {
+    Component {
+        id: delegate
+        Item {
+            id: wrapper
             Button {
                 id: itemButton
                 width: 300
@@ -41,23 +34,44 @@ Rectangle {
                         menu_selecionado.text = name
                     }
                 }
-
                 style: ButtonStyle {
                     background: Rectangle {
                         color: cor
-                        border.color: "black"
-                        border.width: 5
+                        border.color: wrapper.PathView.isCurrentItem ? "red" : "black"
+                        border.width: 10
                         radius: 10
                     }
                 }
-
                 Text {
                     text: name
-                    anchors.horizontalCenter: itemButton.horizontalCenter
-                    anchors.verticalCenter: itemButton.verticalCenter
+                    anchors.centerIn: parent
                 }
             }
         }
     }
+
+    PathView {
+        id: path
+        anchors.fill: parent
+        model: AcaoModel{}
+        delegate: delegate
+        pathItemCount: 3
+        preferredHighlightBegin: 0.35
+        preferredHighlightEnd: 0.65
+        path: Path {
+            startX: 0; startY: 200
+            PathLine { x: 1000; y: 200; }
+        }
+        focus: true
+
+        Timer {
+             interval: 1500; running: true; repeat: true
+             onTriggered: {
+                 path.decrementCurrentIndex()
+             }
+        }
+
+    }
+
 }
 
