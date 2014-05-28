@@ -25,27 +25,26 @@ Rectangle {
         id: delegate
         Item {
             id: wrapper
-            Button {
-                id: itemButton
+            Rectangle {
+                id: rectangle
                 width: 300
                 height: 300
-                action: Action {
-                    onTriggered: {
-                        menu_selecionado.text = name
-                    }
-                }
-                style: ButtonStyle {
-                    background: Rectangle {
-                        color: cor
-                        border.color: wrapper.PathView.isCurrentItem ? "red" : "black"
-                        border.width: 10
-                        radius: 10
-                    }
-                }
+                color: cor
+                border.color: wrapper.PathView.isCurrentItem ? "red" : "black"
+                border.width: 10
+                radius: 10
                 Text {
                     text: name
                     anchors.centerIn: parent
                 }
+            }
+            function seleciona() {
+                if(wrapper.PathView.isCurrentItem) {
+                    menu_selecionado.text = name
+                }
+            }
+            function getSubItens() {
+                return subItems
             }
         }
     }
@@ -63,15 +62,36 @@ Rectangle {
             PathLine { x: 1000; y: 200; }
         }
         focus: true
-
         Timer {
-             interval: 1500; running: true; repeat: true
-             onTriggered: {
-                 path.decrementCurrentIndex()
-             }
+            id: timer
+            interval: 1500; running: true; repeat: true
+            onTriggered: {
+                path.decrementCurrentIndex()
+            }
         }
-
     }
 
+    Rectangle {
+        x: 200
+        width: 100
+        height: 100
+        border.color: "black"
+        border.width: 10
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                timer.stop()
+                for(var i = 0; i < path.children.length; ++i)
+                {
+                    if(path.children[i].PathView.isCurrentItem){
+                        path.children[i].seleciona()
+                        path.model = path.children[i].getSubItens()
+                    }
+                }
+                timer.start()
+            }
+
+        }
+    }
 }
 

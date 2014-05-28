@@ -1,10 +1,10 @@
-import QtQuick 2.0
+import QtQuick 2.2
 
 ListModel {
     ListElement {
         name: "Necessidade"
         cor: "white"
-        itens: [
+        subItems: [
             ListElement {
                 name: "Voltar"
                 cor: "blue"
@@ -26,7 +26,7 @@ ListModel {
     ListElement {
         name: "Dor"
         cor: "white"
-        itens: [
+        subItems: [
             ListElement {
                 name: "Voltar"
                 cor: "blue"
@@ -52,7 +52,7 @@ ListModel {
     ListElement {
         name: "Pessoa"
         cor: "white"
-        itens: [
+        subItems: [
             ListElement {
                 name: "Voltar"
                 cor: "blue"
@@ -82,7 +82,7 @@ ListModel {
     ListElement {
         name: "Atividade"
         cor: "white"
-        itens: [
+        subItems: [
             ListElement {
                 name: "Voltar"
                 cor: "blue"
@@ -104,7 +104,7 @@ ListModel {
     ListElement {
         name: "Sentimento"
         cor: "white"
-        itens: [
+        subItems: [
             ListElement {
                 name: "Voltar"
                 cor: "blue"
@@ -130,7 +130,7 @@ ListModel {
     ListElement {
         name: "Maus Tratos"
         cor: "white"
-        itens: [
+        subItems: [
             ListElement {
                 name: "Voltar"
                 cor: "blue"
