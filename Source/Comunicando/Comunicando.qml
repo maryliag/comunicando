@@ -46,6 +46,12 @@ Rectangle {
             function getSubItens() {
                 return subItems
             }
+            function getType() {
+                return type
+            }
+            function getName() {
+                return name
+            }
         }
     }
 
@@ -72,7 +78,18 @@ Rectangle {
             {
                 if(path.children[i].PathView.isCurrentItem){
                     path.children[i].seleciona()
-                    path.model = path.children[i].getSubItens()
+
+                    if (path.children[i].getType() === "menu") {
+                        path.model = path.children[i].getSubItens()
+                    } else {
+                        if (path.children[i].getName() === "Voltar") {
+//                            path.model =
+                        } else {
+
+                        }
+
+                    }
+
                     timer.restart()
                 }
             }
