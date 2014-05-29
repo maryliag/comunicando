@@ -3,14 +3,14 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 
 Rectangle {
+    id: tela_inicial
     width: 1000
     height: 600
-
+    property int modo_selecao: 1
+    property ListModel modelo: AcaoModel{}
     Rectangle {
         width: 100
         height: 30
-        anchors.leftMargin: 20
-        anchors.topMargin: 20
         color: "blue"
 
         Text {
@@ -20,6 +20,22 @@ Rectangle {
             }
 
     }
+    Rectangle {
+        x: 200
+        width: 100
+        height: 30
+        anchors.leftMargin: 20
+        anchors.topMargin: 20
+        color: "blue"
+
+        Text {
+                anchors.centerIn: parent
+                color: "white"
+                id: menu_selecionado2
+            }
+
+    }
+
 
     Component {
         id: delegate
@@ -40,11 +56,26 @@ Rectangle {
             }
             function seleciona() {
                 if(wrapper.PathView.isCurrentItem) {
-                    menu_selecionado.text = name
+                    if(menu_selecionado.text == "")
+                        menu_selecionado.text = name
+                    else {
+                        if(name == "Voltar")
+                            menu_selecionado.text = ""
+                        else
+                            menu_selecionado2.text = name
+                    }
                 }
             }
             function getSubItens() {
-                return subItems
+                if (type === "menu") {
+                    return subItems
+                } else {
+                    if (name === "Voltar") {
+                        return modelo
+                    } else {
+                        return null
+                    }
+                }
             }
             function getType() {
                 return type
@@ -58,7 +89,7 @@ Rectangle {
     PathView {
         id: path
         anchors.fill: parent
-        model: AcaoModel{}
+        model: modelo
         delegate: delegate
         pathItemCount: 3
         preferredHighlightBegin: 0.35
@@ -68,47 +99,69 @@ Rectangle {
             PathLine { x: 1000; y: 200; }
         }
         focus: true
+        Timer {
+            id: timer
+            interval: 1500; running: true; repeat: true
+            onTriggered: {
+                path.decrementCurrentIndex()
+            }
+        }
     }
 
     Timer {
-        id: timer
-        interval: 3000; running: true; repeat: false
+        id: timer2
+        interval: 3000; running: false; repeat: false
         onTriggered: {
             for(var i = 0; i < path.children.length; ++i)
             {
                 if(path.children[i].PathView.isCurrentItem){
                     path.children[i].seleciona()
-
-                    if (path.children[i].getType() === "menu") {
-                        path.model = path.children[i].getSubItens()
-                    } else {
-                        if (path.children[i].getName() === "Voltar") {
-//                            path.model =
-                        } else {
-
-                        }
-
-                    }
-
-                    timer.restart()
+                    path.model = path.children[i].getSubItens()
+                    timer2.restart()
                 }
             }
         }
     }
 
     Rectangle {
-        x: 200
-        width: 100
-        height: 100
-        border.color: "black"
-        border.width: 10
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                path.decrementCurrentIndex()
-                timer.restart()
-            }
+            x: 400
+            width: 100
+            height: 100
+            border.color: "black"
+            border.width: 10
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if(tela_inicial.modo_selecao === 1) {
+                        timer.stop()
+                        for(var i = 0; i < path.children.length; ++i)
+                        {
+                            if(path.children[i].PathView.isCurrentItem){
+                                path.children[i].seleciona()
+                                path.model = path.children[i].getSubItens()
+                            }
+                        }
+                        timer.start()
+                    }
+                    else {
+                        path.decrementCurrentIndex()
+                        timer2.restart()
+                    }
+                }
 
+            }
         }
+    Keys.onPressed: {
+        if (event.key === Qt.Key_1) {
+            tela_inicial.modo_selecao = 1
+            timer.start()
+            timer2.stop()
+        }
+        else if(event.key === Qt.Key_2) {
+            tela_inicial.modo_selecao = 2
+            timer2.start()
+            timer.stop()
+        }
+
     }
 }
