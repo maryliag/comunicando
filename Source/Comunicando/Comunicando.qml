@@ -104,6 +104,7 @@ Rectangle {
             interval: 1500; running: true; repeat: true
             onTriggered: {
                 path.decrementCurrentIndex()
+                console.log(interval)
             }
         }
     }
@@ -144,6 +145,7 @@ Rectangle {
                         timer.start()
                     }
                     else {
+                        console.log(timer2.interval)
                         path.decrementCurrentIndex()
                         timer2.restart()
                     }
@@ -162,6 +164,18 @@ Rectangle {
             timer2.start()
             timer.stop()
         }
+        else if(event.key === Qt.Key_Left) {
+            if(tela_inicial.modo_selecao == 1)
+                timer.interval = timer.interval - 500
+            else
+                timer2.interval = timer2.interval - 500
+        }
 
+        else if(event.key === Qt.Key_Right) {
+            if(tela_inicial.modo_selecao == 1)
+                timer.interval = timer.interval + 500
+            else
+                timer2.interval = timer2.interval + 500
+        }
     }
 }
