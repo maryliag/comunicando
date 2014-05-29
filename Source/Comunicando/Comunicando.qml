@@ -62,11 +62,19 @@ Rectangle {
             PathLine { x: 1000; y: 200; }
         }
         focus: true
-        Timer {
-            id: timer
-            interval: 1500; running: true; repeat: true
-            onTriggered: {
-                path.decrementCurrentIndex()
+    }
+
+    Timer {
+        id: timer
+        interval: 3000; running: true; repeat: false
+        onTriggered: {
+            for(var i = 0; i < path.children.length; ++i)
+            {
+                if(path.children[i].PathView.isCurrentItem){
+                    path.children[i].seleciona()
+                    path.model = path.children[i].getSubItens()
+                    timer.restart()
+                }
             }
         }
     }
@@ -80,18 +88,10 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                timer.stop()
-                for(var i = 0; i < path.children.length; ++i)
-                {
-                    if(path.children[i].PathView.isCurrentItem){
-                        path.children[i].seleciona()
-                        path.model = path.children[i].getSubItens()
-                    }
-                }
-                timer.start()
+                path.decrementCurrentIndex()
+                timer.restart()
             }
 
         }
     }
 }
-
