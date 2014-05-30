@@ -8,32 +8,33 @@ Rectangle {
     height: 600
     property int modo_selecao: 1
     property ListModel modelo: AcaoModel{}
+
     Rectangle {
-        width: 100
-        height: 30
-        color: "blue"
-
+        id: imagem1
+        width: 150
+        height: 150
+        border.color: "black"
+        border.width: 5
+        radius: 10
         Text {
-                anchors.centerIn: parent
-                color: "white"
-                id: menu_selecionado
-            }
-
+            id: menu_selecionado
+            anchors.centerIn: parent
+        }
     }
+
+
     Rectangle {
+        id: imagem2
         x: 200
-        width: 100
-        height: 30
-        anchors.leftMargin: 20
-        anchors.topMargin: 20
-        color: "blue"
-
+        width: 150
+        height: 150
+        border.color: "black"
+        border.width: 5
+        radius: 10
         Text {
-                anchors.centerIn: parent
-                color: "white"
-                id: menu_selecionado2
-            }
-
+            id: menu_selecionado2
+            anchors.centerIn: parent
+        }
     }
 
 
@@ -56,13 +57,19 @@ Rectangle {
             }
             function seleciona() {
                 if(wrapper.PathView.isCurrentItem) {
-                    if(menu_selecionado.text == "")
+                    if(menu_selecionado.text == "") {
                         menu_selecionado.text = name
+                        imagem1.color = cor
+                    }
                     else {
-                        if(name == "Voltar")
+                        if(name == "Voltar") {
                             menu_selecionado.text = ""
-                        else
+                            imagem1.color = "white"
+                        }
+                        else {
                             menu_selecionado2.text = name
+                            imagem2.color = cor
+                        }
                     }
                 }
             }
@@ -104,7 +111,6 @@ Rectangle {
             interval: 1500; running: true; repeat: true
             onTriggered: {
                 path.decrementCurrentIndex()
-                console.log(interval)
             }
         }
     }
@@ -145,7 +151,6 @@ Rectangle {
                         timer.start()
                     }
                     else {
-                        console.log(timer2.interval)
                         path.decrementCurrentIndex()
                         timer2.restart()
                     }
@@ -153,6 +158,7 @@ Rectangle {
 
             }
         }
+
     Keys.onPressed: {
         if (event.key === Qt.Key_1) {
             tela_inicial.modo_selecao = 1
