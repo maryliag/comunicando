@@ -16,9 +16,21 @@ Rectangle {
         border.color: "black"
         border.width: 5
         radius: 10
-        Text {
-            id: menu_selecionado
+        Image {
+            id: imagem1Opcao
+            width: 75
+            height: 75
             anchors.centerIn: parent
+        }
+        Rectangle {
+            width: 150
+            height: 37.5
+            y:112.5
+            color: "transparent"
+            Text {
+                id: menu_selecionado
+                anchors.centerIn: parent
+            }
         }
     }
 
@@ -31,9 +43,21 @@ Rectangle {
         border.color: "black"
         border.width: 5
         radius: 10
-        Text {
-            id: menu_selecionado2
+        Image {
+            id: imagem2Opcao
+            width: 75
+            height: 75
             anchors.centerIn: parent
+        }
+        Rectangle {
+            width: 150
+            height: 37.5
+            y:112.5
+            color: "transparent"
+            Text {
+                id: menu_selecionado2
+                anchors.centerIn: parent
+            }
         }
     }
 
@@ -50,9 +74,23 @@ Rectangle {
                 border.color: wrapper.PathView.isCurrentItem ? "red" : "black"
                 border.width: 10
                 radius: 10
-                Text {
-                    text: name
+                Image {
+                    id: imagemOpcao
+                    source: image
+                    width: 150
+                    height: 150
                     anchors.centerIn: parent
+                }
+                Rectangle {
+                    width: 300
+                    height: 75
+                    y:225
+                    color: "transparent"
+                    Text {
+                        text: name
+                        scale: 1.5
+                        anchors.centerIn: parent
+                    }
                 }
             }
             function seleciona() {
@@ -60,6 +98,7 @@ Rectangle {
                     if(menu_selecionado.text == "") {
                         menu_selecionado.text = name
                         imagem1.color = cor
+                        imagem1Opcao.source = image
                     }
                     else {
                         if(name == "Voltar") {
@@ -69,6 +108,7 @@ Rectangle {
                         else {
                             menu_selecionado2.text = name
                             imagem2.color = cor
+                            imagem2Opcao.source = image
                         }
                     }
                 }

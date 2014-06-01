@@ -1,195 +1,238 @@
 import QtQuick 2.2
 
+// Rosa: comprimentos e expressões sociais
+// Amarelo: sujeitos
+// Verde: verbos
+// Laranja: substantivos
+// Azul: adjetivos
+// Branco: demais
+
 ListModel {
     ListElement {
         name: "Necessidade"
-        cor: "white"
+        cor: "orange"
         type: "menu"
+        image: "resources/smiley.jpg"
         subItems: [
             ListElement {
                 name: "Voltar"
-                cor: "blue"
+                cor: "white"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Bebida"
-                cor: "blue"
+                cor: "orange"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Comida"
-                cor: "blue"
+                cor: "orange"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Banheiro"
-                cor: "blue"
+                cor: "orange"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             }
         ]
     }
     ListElement {
         name: "Dor"
-        cor: "white"
+        cor: "pink"
         type: "menu"
+        image: "resources/smiley.jpg"
         subItems: [
             ListElement {
                 name: "Voltar"
-                cor: "blue"
+                cor: "white"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Cabeça"
-                cor: "blue"
+                cor: "pink"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Braço"
-                cor: "blue"
+                cor: "pink"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Perna"
-                cor: "blue"
+                cor: "pink"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Costas"
-                cor: "blue"
+                cor: "pink"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             }
         ]
     }
     ListElement {
         name: "Pessoa"
-        cor: "white"
+        cor: "yellow"
         type: "menu"
+        image: "resources/smiley.jpg"
         subItems: [
             ListElement {
                 name: "Voltar"
-                cor: "blue"
+                cor: "white"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Mãe"
-                cor: "blue"
+                cor: "yellow"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Pai"
-                cor: "blue"
+                cor: "yellow"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Cuidadora"
-                cor: "blue"
+                cor: "yellow"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Enfermeira"
-                cor: "blue"
+                cor: "yellow"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Irmãos"
-                cor: "blue"
+                cor: "yellow"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             }
         ]
     }
     ListElement {
         name: "Atividade"
-        cor: "white"
+        cor: "green"
         type: "menu"
+        image: "resources/smiley.jpg"
         subItems: [
             ListElement {
                 name: "Voltar"
-                cor: "blue"
+                cor: "white"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
-                name: "TV"
-                cor: "blue"
+                name: "Assistir TV"
+                cor: "green"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
-                name: "História"
-                cor: "blue"
+                name: "Escutar uma História"
+                cor: "green"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
-                name: "Jogo"
-                cor: "blue"
+                name: "Jogar"
+                cor: "green"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             }
         ]
     }
     ListElement {
         name: "Sentimento"
-        cor: "white"
+        cor: "blue"
         type: "menu"
+        image: "resources/smiley.jpg"
         subItems: [
             ListElement {
                 name: "Voltar"
-                cor: "blue"
+                cor: "white"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Feliz"
                 cor: "blue"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Triste"
                 cor: "blue"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Saudade"
                 cor: "blue"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Tédio"
                 cor: "blue"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             }
         ]
     }
     ListElement {
         name: "Maus Tratos"
-        cor: "white"
+        cor: "dark red"
         type: "menu"
+        image: "resources/smiley.jpg"
         subItems: [
             ListElement {
                 name: "Voltar"
-                cor: "blue"
+                cor: "white"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Mãe"
-                cor: "blue"
+                cor: "dark red"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Pai"
-                cor: "blue"
+                cor: "dark red"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Cuidadora"
-                cor: "blue"
+                cor: "dark red"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Enfermeira"
-                cor: "blue"
+                cor: "dark red"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             },
             ListElement {
                 name: "Irmãos"
-                cor: "blue"
+                cor: "dark red"
                 type: "submenu"
+                image: "resources/smiley.jpg"
             }
         ]
     }
