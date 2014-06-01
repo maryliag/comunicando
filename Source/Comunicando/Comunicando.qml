@@ -61,6 +61,32 @@ Rectangle {
         }
     }
 
+    Text {
+        id: explicacao_modo
+        x: 530
+        y: 40
+        text: "Espere a opção desejada e clique na área preta"
+    }
+
+    Text {
+        id: tempo_selecao
+        x: 495
+        y: 170
+        scale: 2
+    }
+
+    Text {
+        id: explicacao_tempo
+        x: 30
+        y: 540
+        text: "Aperte as setas para esq/dir para diminuir/aumentar a velocidade"
+    }
+
+    Text {
+        x: 30
+        y: 560
+        text: "Aperte 1 ou 2 para escolher o modo de seleção"
+    }
 
     Component {
         id: delegate
@@ -157,7 +183,7 @@ Rectangle {
 
     Timer {
         id: timer2
-        interval: 3000; running: false; repeat: false
+        interval: 5000; running: false; repeat: false
         onTriggered: {
             for(var i = 0; i < path.children.length; ++i)
             {
@@ -165,7 +191,20 @@ Rectangle {
                     path.children[i].seleciona()
                     path.model = path.children[i].getSubItens()
                     timer2.restart()
+                    tempo_selecao.text = timer2.interval/1000
                 }
+            }
+        }
+    }
+
+    Timer {
+        id: timer3
+        interval: 1000; running: true; repeat: true
+        onTriggered: {
+            if (tela_inicial.modo_selecao == 1) {
+                tempo_selecao.text = ""
+            } else {
+                tempo_selecao.text = parseInt(tempo_selecao.text) - 1
             }
         }
     }
@@ -174,6 +213,7 @@ Rectangle {
             x: 400
             width: 100
             height: 100
+            color: "black"
             border.color: "black"
             border.width: 10
             MouseArea {
@@ -193,6 +233,7 @@ Rectangle {
                     else {
                         path.decrementCurrentIndex()
                         timer2.restart()
+                        tempo_selecao.text = timer2.interval/1000
                     }
                 }
 
@@ -202,26 +243,38 @@ Rectangle {
     Keys.onPressed: {
         if (event.key === Qt.Key_1) {
             tela_inicial.modo_selecao = 1
+            explicacao_tempo.text = "Aperte as setas para esq/dir para diminuir/aumentar a velocidade"
+            explicacao_modo.text = "Espere a opção desejada e clique na área preta"
+            tempo_selecao.text = ""
             timer.start()
             timer2.stop()
         }
         else if(event.key === Qt.Key_2) {
             tela_inicial.modo_selecao = 2
+            explicacao_tempo.text = "Aperte as setas para esq/dir para diminuir/aumentar o tempo"
+            explicacao_modo.text = "Clique na área preta até chegar na opção desejada e aguarde"
+            tempo_selecao.text = timer2.interval/1000
             timer2.start()
             timer.stop()
         }
         else if(event.key === Qt.Key_Left) {
-            if(tela_inicial.modo_selecao == 1)
+            if(tela_inicial.modo_selecao == 1) {
                 timer.interval = timer.interval - 500
-            else
+            } else {
                 timer2.interval = timer2.interval - 500
+                tempo_selecao.text = timer2.interval/1000
+                timer2.restart()
+            }
         }
 
         else if(event.key === Qt.Key_Right) {
-            if(tela_inicial.modo_selecao == 1)
+            if(tela_inicial.modo_selecao == 1) {
                 timer.interval = timer.interval + 500
-            else
+            } else {
                 timer2.interval = timer2.interval + 500
+                tempo_selecao.text = timer2.interval/1000
+                timer2.restart()
+            }
         }
     }
 }
