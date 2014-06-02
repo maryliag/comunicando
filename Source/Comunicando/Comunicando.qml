@@ -3,22 +3,89 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 
 Rectangle {
+    id: tela_inicial
     width: 1000
     height: 600
+    property int modo_selecao: 1
+    property ListModel modelo: AcaoModel{}
 
     Rectangle {
-        width: 100
-        height: 30
-        anchors.leftMargin: 20
-        anchors.topMargin: 20
-        color: "blue"
-
-        Text {
-                anchors.centerIn: parent
-                color: "white"
+        id: imagem1
+        width: 150
+        height: 150
+        border.color: "black"
+        border.width: 5
+        radius: 10
+        Image {
+            id: imagem1Opcao
+            width: 75
+            height: 75
+            anchors.centerIn: parent
+        }
+        Rectangle {
+            width: 150
+            height: 37.5
+            y:112.5
+            color: "transparent"
+            Text {
                 id: menu_selecionado
+                anchors.centerIn: parent
             }
+        }
+    }
 
+
+    Rectangle {
+        id: imagem2
+        x: 200
+        width: 150
+        height: 150
+        border.color: "black"
+        border.width: 5
+        radius: 10
+        Image {
+            id: imagem2Opcao
+            width: 75
+            height: 75
+            anchors.centerIn: parent
+        }
+        Rectangle {
+            width: 150
+            height: 37.5
+            y:112.5
+            color: "transparent"
+            Text {
+                id: menu_selecionado2
+                anchors.centerIn: parent
+            }
+        }
+    }
+
+    Text {
+        id: explicacao_modo
+        x: 530
+        y: 40
+        text: "Espere a opção desejada e clique na área preta"
+    }
+
+    Text {
+        id: tempo_selecao
+        x: 495
+        y: 170
+        scale: 2
+    }
+
+    Text {
+        id: explicacao_tempo
+        x: 30
+        y: 540
+        text: "Aperte as setas para esq/dir para diminuir/aumentar a velocidade"
+    }
+
+    Text {
+        x: 30
+        y: 560
+        text: "Aperte 1 ou 2 para escolher o modo de seleção"
     }
 
     Component {
@@ -33,18 +100,61 @@ Rectangle {
                 border.color: wrapper.PathView.isCurrentItem ? "red" : "black"
                 border.width: 10
                 radius: 10
-                Text {
-                    text: name
+                Image {
+                    id: imagemOpcao
+                    source: image
+                    width: 150
+                    height: 150
                     anchors.centerIn: parent
+                }
+                Rectangle {
+                    width: 300
+                    height: 75
+                    y:225
+                    color: "transparent"
+                    Text {
+                        text: name
+                        scale: 1.5
+                        anchors.centerIn: parent
+                    }
                 }
             }
             function seleciona() {
                 if(wrapper.PathView.isCurrentItem) {
-                    menu_selecionado.text = name
+                    if(menu_selecionado.text == "") {
+                        menu_selecionado.text = name
+                        imagem1.color = cor
+                        imagem1Opcao.source = image
+                    } else {
+                        if(name == "Voltar") {
+                            menu_selecionado.text = ""
+                            imagem1.color = "white"
+                            imagem1Opcao.source = ""
+                        }
+                        else {
+                            menu_selecionado2.text = name
+                            imagem2.color = cor
+                            imagem2Opcao.source = image
+                        }
+                    }
                 }
             }
             function getSubItens() {
-                return subItems
+                if (type === "menu") {
+                    return subItems
+                } else {
+                    if (name === "Voltar") {
+                        return modelo
+                    } else {
+                        return null
+                    }
+                }
+            }
+            function getType() {
+                return type
+            }
+            function getName() {
+                return name
             }
         }
     }
@@ -52,7 +162,7 @@ Rectangle {
     PathView {
         id: path
         anchors.fill: parent
-        model: AcaoModel{}
+        model: modelo
         delegate: delegate
         pathItemCount: 3
         preferredHighlightBegin: 0.35
@@ -64,34 +174,107 @@ Rectangle {
         focus: true
         Timer {
             id: timer
-            interval: 1500; running: true; repeat: true
+            interval: 4000; running: true; repeat: true
             onTriggered: {
                 path.decrementCurrentIndex()
             }
         }
     }
 
+    Timer {
+        id: timer2
+        interval: 5000; running: false; repeat: false
+        onTriggered: {
+            for(var i = 0; i < path.children.length; ++i)
+            {
+                if(path.children[i].PathView.isCurrentItem){
+                    path.children[i].seleciona()
+                    path.model = path.children[i].getSubItens()
+                    timer2.restart()
+                    tempo_selecao.text = timer2.interval/1000
+                }
+            }
+        }
+    }
+
+    Timer {
+        id: timer3
+        interval: 1000; running: true; repeat: true
+        onTriggered: {
+            if (tela_inicial.modo_selecao == 1) {
+                tempo_selecao.text = ""
+            } else {
+                tempo_selecao.text = parseInt(tempo_selecao.text) - 1
+            }
+        }
+    }
+
     Rectangle {
-        x: 200
-        width: 100
-        height: 100
-        border.color: "black"
-        border.width: 10
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                timer.stop()
-                for(var i = 0; i < path.children.length; ++i)
-                {
-                    if(path.children[i].PathView.isCurrentItem){
-                        path.children[i].seleciona()
-                        path.model = path.children[i].getSubItens()
+            x: 400
+            width: 100
+            height: 100
+            color: "black"
+            border.color: "black"
+            border.width: 10
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if(tela_inicial.modo_selecao === 1) {
+                        timer.stop()
+                        for(var i = 0; i < path.children.length; ++i)
+                        {
+                            if(path.children[i].PathView.isCurrentItem){
+                                path.children[i].seleciona()
+                                path.model = path.children[i].getSubItens()
+                            }
+                        }
+                        timer.start()
+                    }
+                    else {
+                        path.decrementCurrentIndex()
+                        timer2.restart()
+                        tempo_selecao.text = timer2.interval/1000
                     }
                 }
-                timer.start()
-            }
 
+            }
+        }
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_1) {
+            tela_inicial.modo_selecao = 1
+            explicacao_tempo.text = "Aperte as setas para esq/dir para diminuir/aumentar a velocidade"
+            explicacao_modo.text = "Espere a opção desejada e clique na área preta"
+            tempo_selecao.text = ""
+            timer.start()
+            timer2.stop()
+        }
+        else if(event.key === Qt.Key_2) {
+            tela_inicial.modo_selecao = 2
+            explicacao_tempo.text = "Aperte as setas para esq/dir para diminuir/aumentar o tempo"
+            explicacao_modo.text = "Clique na área preta até chegar na opção desejada e aguarde"
+            tempo_selecao.text = timer2.interval/1000
+            timer2.start()
+            timer.stop()
+        }
+        else if(event.key === Qt.Key_Left) {
+            if(tela_inicial.modo_selecao == 1) {
+                timer.interval = timer.interval - 500
+            } else {
+                timer2.interval = timer2.interval - 500
+                tempo_selecao.text = timer2.interval/1000
+                timer2.restart()
+            }
+        }
+
+        else if(event.key === Qt.Key_Right) {
+            if(tela_inicial.modo_selecao == 1) {
+                timer.interval = timer.interval + 500
+            } else {
+                timer2.interval = timer2.interval + 500
+                tempo_selecao.text = timer2.interval/1000
+                timer2.restart()
+            }
         }
     }
 }
-
