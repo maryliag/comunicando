@@ -3,7 +3,7 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 Rectangle {
     id: programa
-    width: 1200
+    width: 1000
     height: 900
     state: "TELA_INICIAL"
 
@@ -80,6 +80,10 @@ Rectangle {
                     imagem2Opcao.source = ""
                     menu_selecionado2.text =  ""
                     path.model = tela_inicial.modelo
+                    if(tela_inicial.modo_selecao == 2) {
+                        timer2.restart()
+                        tempo_selecao.text = timer2.interval/1000
+                    }
                 }
             }
         }
@@ -90,8 +94,19 @@ Rectangle {
         anchors.fill: parent
         z: 1
         property int modo_selecao: 1
+        property int modo_rolagem: 1
+        property int tamanho_imagem: 150
+        property int tamanho_imagem_selecionada: 75
         property ListModel modelo: AcaoModel{}
         property ListModel confirmacao: ConfirmacaoModel{}
+        property Path horizontal: Path {
+            startX: 0; startY: 200
+            PathLine { x: 1000; y: 200; }
+        }
+        property Path vertical: Path {
+            startX: 350; startY: 0
+            PathLine { x: 350; y: 800; }
+        }
 
         Rectangle {
             id: imagem1
@@ -102,8 +117,8 @@ Rectangle {
             radius: 10
             Image {
                 id: imagem1Opcao
-                width: 75
-                height: 75
+                width: tela_inicial.tamanho_imagem_selecionada
+                height: tela_inicial.tamanho_imagem_selecionada
                 anchors.centerIn: parent
             }
             Rectangle {
@@ -120,7 +135,7 @@ Rectangle {
 
         Rectangle {
             id: imagem2
-            x: 200
+            x: 160
             width: 150
             height: 150
             border.color: "black"
@@ -128,8 +143,8 @@ Rectangle {
             radius: 10
             Image {
                 id: imagem2Opcao
-                width: 75
-                height: 75
+                width: tela_inicial.tamanho_imagem_selecionada
+                height: tela_inicial.tamanho_imagem_selecionada
                 anchors.centerIn: parent
             }
             Rectangle {
@@ -145,10 +160,17 @@ Rectangle {
         }
 
         Text {
-            id: explicacao_modo
-            x: 530
-            y: 40
-            text: "Espere a opção desejada e clique na área preta"
+            id: explicacao1_modo
+            x: 790
+            y: 120
+            text: "Espere a opção desejada e"
+        }
+
+        Text {
+            id: explicacao2_modo
+            x: 790
+            y: 140
+            text: "clique na área preta"
         }
 
         Text {
@@ -159,16 +181,41 @@ Rectangle {
         }
 
         Text {
-            id: explicacao_tempo
-            x: 30
+            x: 20
             y: 540
-            text: "Aperte as setas para esq/dir para diminuir/aumentar a velocidade"
+            text: "*Aperte 1 ou 2 para escolher o modo de seleção"
         }
 
         Text {
-            x: 30
+            id: explicacao1_tempo
+            x: 20
             y: 560
-            text: "Aperte 1 ou 2 para escolher o modo de seleção"
+            text: "*Aperte as setas para esq/dir"
+        }
+
+        Text {
+            id: explicacao2_tempo
+            x: 20
+            y: 580
+            text: "para diminuir/aumentar a velocidade"
+        }
+
+        Text {
+            x: 20
+            y: 600
+            text: "*Aperte G/P para aumentar/diminuir"
+        }
+
+        Text {
+            x: 20
+            y: 620
+            text: "o tamanho das imagens"
+        }
+
+        Text {
+            x: 20
+            y: 640
+            text: "*Aperte V/H para escolher vertical/horizontal"
         }
 
         Component {
@@ -177,8 +224,8 @@ Rectangle {
                 id: wrapper
                 Rectangle {
                     id: rectangle
-                    width: 300
-                    height: 300
+                    width: 250
+                    height: 250
                     color: cor
                     border.color: wrapper.PathView.isCurrentItem ? "red" : "black"
                     border.width: 10
@@ -186,8 +233,8 @@ Rectangle {
                     Image {
                         id: imagemOpcao
                         source: image
-                        width: 150
-                        height: 150
+                        width: tela_inicial.tamanho_imagem
+                        height: tela_inicial.tamanho_imagem
                         anchors.centerIn: parent
                     }
                     Rectangle {
@@ -270,10 +317,7 @@ Rectangle {
             pathItemCount: 3
             preferredHighlightBegin: 0.35
             preferredHighlightEnd: 0.65
-            path: Path {
-                startX: 0; startY: 200
-                PathLine { x: 1000; y: 200; }
-            }
+            path: tela_inicial.horizontal
             focus: true
             Timer {
                 id: timer
@@ -313,7 +357,7 @@ Rectangle {
         }
 
         Rectangle {
-                x: 400
+                x: 880
                 width: 100
                 height: 100
                 color: "black"
@@ -345,23 +389,27 @@ Rectangle {
         Keys.onPressed: {
             if (event.key === Qt.Key_1) {
                 tela_inicial.modo_selecao = 1
-                explicacao_tempo.text = "Aperte as setas para esq/dir para diminuir/aumentar a velocidade"
-                explicacao_modo.text = "Espere a opção desejada e clique na área preta"
+                explicacao1_tempo.text = "*Aperte as setas para esq/dir"
+                explicacao2_tempo.text = "para diminuir/aumentar a velocidade"
+                explicacao1_modo.text = "Espere a opção desejada e"
+                explicacao2_modo.text = "clique na área preta"
                 tempo_selecao.text = ""
                 timer.start()
                 timer2.stop()
             }
             else if(event.key === Qt.Key_2) {
                 tela_inicial.modo_selecao = 2
-                explicacao_tempo.text = "Aperte as setas para esq/dir para diminuir/aumentar o tempo"
-                explicacao_modo.text = "Clique na área preta até chegar na opção desejada e aguarde"
+                explicacao1_tempo.text = "*Aperte as setas para esq/dir"
+                explicacao2_tempo.text = "para diminuir/aumentar o tempo"
+                explicacao1_modo.text = "Clique na área preta até chegar"
+                explicacao2_modo.text = "na opção desejada e aguarde"
                 tempo_selecao.text = timer2.interval/1000
                 timer2.start()
                 timer.stop()
             }
             else if(event.key === Qt.Key_Left) {
                 if(tela_inicial.modo_selecao == 1) {
-                    timer.interval = timer.interval - 500
+                    timer.interval = timer.interval + 500
                 } else {
                     timer2.interval = timer2.interval - 500
                     tempo_selecao.text = timer2.interval/1000
@@ -371,12 +419,30 @@ Rectangle {
 
             else if(event.key === Qt.Key_Right) {
                 if(tela_inicial.modo_selecao == 1) {
-                    timer.interval = timer.interval + 500
+                    timer.interval = timer.interval - 500
                 } else {
                     timer2.interval = timer2.interval + 500
                     tempo_selecao.text = timer2.interval/1000
                     timer2.restart()
                 }
+            }
+            else if(event.key === Qt.Key_G) {
+                if(tela_inicial.tamanho_imagem < 280) {
+                    tela_inicial.tamanho_imagem = tela_inicial.tamanho_imagem + 10
+                    tela_inicial.tamanho_imagem_selecionada = tela_inicial.tamanho_imagem_selecionada + 5
+                }
+            }
+            else if(event.key === Qt.Key_P) {
+                if(tela_inicial.tamanho_imagem >= 0) {
+                    tela_inicial.tamanho_imagem = tela_inicial.tamanho_imagem - 10
+                    tela_inicial.tamanho_imagem_selecionada = tela_inicial.tamanho_imagem_selecionada - 5
+                }
+            }
+            else if(event.key === Qt.Key_V) {
+                path.path = tela_inicial.vertical
+            }
+            else if(event.key === Qt.Key_H) {
+                path.path = tela_inicial.horizontal
             }
         }
     }
