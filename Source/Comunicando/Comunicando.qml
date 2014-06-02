@@ -440,9 +440,13 @@ Rectangle {
             }
             else if(event.key === Qt.Key_V) {
                 path.path = tela_inicial.vertical
+                imagem2.x = 0
+                imagem2.y = 160
             }
             else if(event.key === Qt.Key_H) {
                 path.path = tela_inicial.horizontal
+                imagem2.x = 160
+                imagem2.y = 0
             }
         }
     }
