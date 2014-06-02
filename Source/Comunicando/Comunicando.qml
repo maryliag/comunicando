@@ -94,9 +94,10 @@ Rectangle {
         anchors.fill: parent
         z: 1
         property int modo_selecao: 1
-        property int modo_rolagem: 1
         property int tamanho_imagem: 150
         property int tamanho_imagem_selecionada: 75
+        property int contador_x: 480
+        property int contador_y: 170
         property ListModel modelo: AcaoModel{}
         property ListModel confirmacao: ConfirmacaoModel{}
         property Path horizontal: Path {
@@ -104,8 +105,8 @@ Rectangle {
             PathLine { x: 1000; y: 200; }
         }
         property Path vertical: Path {
-            startX: 350; startY: 0
-            PathLine { x: 350; y: 800; }
+            startX: 375; startY: 0
+            PathLine { x: 375; y: 800; }
         }
 
         Rectangle {
@@ -175,8 +176,8 @@ Rectangle {
 
         Text {
             id: tempo_selecao
-            x: 495
-            y: 170
+            x: tela_inicial.contador_x
+            y: tela_inicial.contador_y
             scale: 2
         }
 
@@ -238,9 +239,9 @@ Rectangle {
                         anchors.centerIn: parent
                     }
                     Rectangle {
-                        width: 300
+                        width: 250
                         height: 75
-                        y:225
+                        y:180
                         color: "transparent"
                         Text {
                             text: name
@@ -427,7 +428,7 @@ Rectangle {
                 }
             }
             else if(event.key === Qt.Key_G) {
-                if(tela_inicial.tamanho_imagem < 280) {
+                if(tela_inicial.tamanho_imagem < 230) {
                     tela_inicial.tamanho_imagem = tela_inicial.tamanho_imagem + 10
                     tela_inicial.tamanho_imagem_selecionada = tela_inicial.tamanho_imagem_selecionada + 5
                 }
@@ -440,9 +441,13 @@ Rectangle {
             }
             else if(event.key === Qt.Key_V) {
                 path.path = tela_inicial.vertical
+                tela_inicial.contador_x = 660
+                tela_inicial.contador_y = 400
             }
             else if(event.key === Qt.Key_H) {
                 path.path = tela_inicial.horizontal
+                tela_inicial.contador_x = 480
+                tela_inicial.contador_y = 170
             }
         }
     }
