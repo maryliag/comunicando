@@ -125,11 +125,11 @@ Rectangle {
                         menu_selecionado.text = name
                         imagem1.color = cor
                         imagem1Opcao.source = image
-                    }
-                    else {
+                    } else {
                         if(name == "Voltar") {
                             menu_selecionado.text = ""
                             imagem1.color = "white"
+                            imagem1Opcao.source = ""
                         }
                         else {
                             menu_selecionado2.text = name
@@ -174,7 +174,7 @@ Rectangle {
         focus: true
         Timer {
             id: timer
-            interval: 1500; running: true; repeat: true
+            interval: 4000; running: true; repeat: true
             onTriggered: {
                 path.decrementCurrentIndex()
             }
