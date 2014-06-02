@@ -443,11 +443,15 @@ Rectangle {
                 path.path = tela_inicial.vertical
                 tela_inicial.contador_x = 660
                 tela_inicial.contador_y = 400
+                imagem2.x = 0
+                imagem2.y = 160
             }
             else if(event.key === Qt.Key_H) {
                 path.path = tela_inicial.horizontal
                 tela_inicial.contador_x = 480
                 tela_inicial.contador_y = 170
+                imagem2.x = 160
+                imagem2.y = 0
             }
         }
     }
