@@ -105,8 +105,8 @@ Rectangle {
             PathLine { x: 1000; y: 200; }
         }
         property Path vertical: Path {
-            startX: 375; startY: 0
-            PathLine { x: 375; y: 800; }
+            startX: 425; startY: 0
+            PathLine { x: 425; y: 800; }
         }
 
         Rectangle {
@@ -161,17 +161,10 @@ Rectangle {
         }
 
         Text {
-            id: explicacao1_modo
-            x: 790
-            y: 120
-            text: "Espere a opção desejada e"
-        }
-
-        Text {
-            id: explicacao2_modo
-            x: 790
-            y: 140
-            text: "clique na área preta"
+            id: explicacaos_modo
+            x: 780
+            y: 100
+            text: "Espere a opção desejada e\nclique na área preta"
         }
 
         Text {
@@ -182,41 +175,52 @@ Rectangle {
         }
 
         Text {
-            x: 20
+            id: texto_modo_selecao
+            x: 10
+            y: 520
+            font.bold: true
+            text: "Modo de seleção: varredura"
+        }
+
+        Text {
+            x: 10
             y: 540
-            text: "*Aperte 1 ou 2 para escolher o modo de seleção"
+            text: "*Aperte 1 para escolher o modo de seleção de varredura\nou 2 para o de contagem regressiva"
         }
 
         Text {
-            id: explicacao1_tempo
-            x: 20
-            y: 560
-            text: "*Aperte as setas para esq/dir"
-        }
-
-        Text {
-            id: explicacao2_tempo
-            x: 20
-            y: 580
-            text: "para diminuir/aumentar a velocidade"
-        }
-
-        Text {
-            x: 20
+            id: texto_timer
+            x: 10
             y: 600
-            text: "*Aperte G/P para aumentar/diminuir"
+            font.bold: true
+            text: "Tempo: " + timer.interval / 1000 + "s"
         }
 
         Text {
-            x: 20
+            id: explicacao_tempo
+            x: 10
             y: 620
-            text: "o tamanho das imagens"
+            text: "*Aperte as setas para esq/dir para diminuir/aumentar\na velocidade"
         }
 
         Text {
-            x: 20
-            y: 640
-            text: "*Aperte V/H para escolher vertical/horizontal"
+            id: texto_posicionamento
+            x: 10
+            y: 680
+            font.bold: true
+            text: "Modo posicionamento das imagens: horizontal"
+        }
+
+        Text {
+            x: 10
+            y: 700
+            text: "*Aperte V/H para escolher o modo vertical/horizontal"
+        }
+
+        Text {
+            x: 10
+            y: 740
+            text: "*Aperte G/P para aumentar/diminuir o tamanho das\nimagens"
         }
 
         Component {
@@ -358,7 +362,7 @@ Rectangle {
         }
 
         Rectangle {
-                x: 880
+                x: 820
                 width: 100
                 height: 100
                 color: "black"
@@ -387,32 +391,36 @@ Rectangle {
                 }
         }
 
+
+
         Keys.onPressed: {
             if (event.key === Qt.Key_1) {
                 tela_inicial.modo_selecao = 1
-                explicacao1_tempo.text = "*Aperte as setas para esq/dir"
-                explicacao2_tempo.text = "para diminuir/aumentar a velocidade"
-                explicacao1_modo.text = "Espere a opção desejada e"
-                explicacao2_modo.text = "clique na área preta"
+                texto_modo_selecao.text = "Modo de seleção: varredura"
+                texto_timer.text = "Tempo: " + timer.interval / 1000 + "s"
+                explicacao_tempo.text = "*Aperte as setas para esq/dir para diminuir/aumentar\na velocidade"
+                explicacaos_modo.text = "Espere a opção desejada e\nclique na área preta"
                 tempo_selecao.text = ""
                 timer.start()
                 timer2.stop()
             }
             else if(event.key === Qt.Key_2) {
                 tela_inicial.modo_selecao = 2
-                explicacao1_tempo.text = "*Aperte as setas para esq/dir"
-                explicacao2_tempo.text = "para diminuir/aumentar o tempo"
-                explicacao1_modo.text = "Clique na área preta até chegar"
-                explicacao2_modo.text = "na opção desejada e aguarde"
+                texto_modo_selecao.text = "Modo de seleção: contagem regressiva"
+                texto_timer.text = "Tempo: " + timer2.interval / 1000 + "s"
+                explicacao_tempo.text = "*Aperte as setas para esq/dir para diminuir/aumentar\no tempo"
+                explicacaos_modo.text = "Clique na área preta até chegar\nna opção desejada e aguarde"
                 tempo_selecao.text = timer2.interval/1000
                 timer2.start()
                 timer.stop()
             }
             else if(event.key === Qt.Key_Left) {
                 if(tela_inicial.modo_selecao == 1) {
-                    timer.interval = timer.interval + 500
+                    timer.interval = timer.interval - 500
+                    texto_timer.text = "Tempo: " + timer.interval / 1000 + "s"
                 } else {
                     timer2.interval = timer2.interval - 500
+                    texto_timer.text = "Tempo: " + timer2.interval / 1000 + "s"
                     tempo_selecao.text = timer2.interval/1000
                     timer2.restart()
                 }
@@ -420,9 +428,11 @@ Rectangle {
 
             else if(event.key === Qt.Key_Right) {
                 if(tela_inicial.modo_selecao == 1) {
-                    timer.interval = timer.interval - 500
+                    timer.interval = timer.interval + 500
+                    texto_timer.text = "Tempo: " + timer.interval / 1000 + "s"
                 } else {
                     timer2.interval = timer2.interval + 500
+                    texto_timer.text = "Tempo: " + timer2.interval / 1000 + "s"
                     tempo_selecao.text = timer2.interval/1000
                     timer2.restart()
                 }
@@ -445,6 +455,7 @@ Rectangle {
                 tela_inicial.contador_y = 400
                 imagem2.x = 0
                 imagem2.y = 160
+                texto_posicionamento.text = "Modo posicionamento das imagens: vertical"
             }
             else if(event.key === Qt.Key_H) {
                 path.path = tela_inicial.horizontal
@@ -452,6 +463,7 @@ Rectangle {
                 tela_inicial.contador_y = 170
                 imagem2.x = 160
                 imagem2.y = 0
+                texto_posicionamento.text = "Modo posicionamento das imagens: horizontal"
             }
         }
     }
