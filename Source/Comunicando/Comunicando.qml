@@ -1,16 +1,19 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
+
 Rectangle {
+    //Descrição da tela principal
     id: programa
     width: 1000
     height: 900
     state: "TELA_INICIAL"
-
+    //Confirmacao do grupo de objetos selecionadas, inicialmente colocamos apenas dois
     Rectangle {
         id: tela_mensagem
         anchors.fill: parent
         z: 0
+        //Primeiro objeto selecionado e sua descricao
         Rectangle {
             id: selecionado1
             width: 250
@@ -20,12 +23,14 @@ Rectangle {
             border.color: "black"
             border.width: 10
             radius: 10
+
             Image {
                 id: imagemSelecionada1
                 width: 150
                 height: 150
                 anchors.centerIn: parent
             }
+
             Rectangle {
                 anchors.bottom: parent.bottom
                 width: 250
@@ -38,6 +43,7 @@ Rectangle {
                 }
             }
         }
+        //Segundo Objeto seleciionado
         Rectangle {
             id: selecionado2
             width: 250
@@ -65,21 +71,25 @@ Rectangle {
                 }
             }
         }
+        //Botao de retorno para tela inicial
         Button {
             id: botaoOk
             text: "Ok"
             x: 415
             y: 450
             action: Action {
+
                 onTriggered: {
                     programa.state = "TELA_INICIAL"
                     imagem1.color = "white"
                     imagem1Opcao.source = ""
                     menu_selecionado.text = ""
+
                     imagem2.color = "white"
                     imagem2Opcao.source = ""
                     menu_selecionado2.text =  ""
                     path.model = tela_inicial.modelo
+
                     if(tela_inicial.modo_selecao == 2) {
                         timer2.restart()
                         tempo_selecao.text = timer2.interval/1000
@@ -89,6 +99,7 @@ Rectangle {
         }
     }
 
+    //Construção da tela inicial
     Rectangle {
         id: tela_inicial
         anchors.fill: parent
@@ -98,8 +109,12 @@ Rectangle {
         property int tamanho_imagem_selecionada: 75
         property int contador_x: 480
         property int contador_y: 170
+
+        //Inicializando as suas listas de elementos
         property ListModel modelo: AcaoModel{}
         property ListModel confirmacao: ConfirmacaoModel{}
+
+        //Modo de vizualização horizontal e Vertical
         property Path horizontal: Path {
             startX: 0; startY: 200
             PathLine { x: 1000; y: 200; }
@@ -108,7 +123,8 @@ Rectangle {
             startX: 425; startY: 0
             PathLine { x: 425; y: 800; }
         }
-
+        //Feedback para o usuário que ele selecinou a primeira imagem no canto superior esquerdo
+        //Primeira e segunda imagem selecionada
         Rectangle {
             id: imagem1
             width: 150
@@ -160,6 +176,7 @@ Rectangle {
             }
         }
 
+        //Texto explicando funcionamento algumas ação
         Text {
             id: explicacaos_modo
             x: 780
@@ -392,8 +409,10 @@ Rectangle {
         }
 
 
+    //Ações para os botões de ajustes do sistema para o cuidador
 
         Keys.onPressed: {
+            //Navegação entre o modo de varedura automatica e varedura com um timer para seleção
             if (event.key === Qt.Key_1) {
                 tela_inicial.modo_selecao = 1
                 texto_modo_selecao.text = "Modo de seleção: varredura"
@@ -414,6 +433,7 @@ Rectangle {
                 timer2.start()
                 timer.stop()
             }
+            //Aumentar ou diminuir o tempo de vareduara
             else if(event.key === Qt.Key_Left) {
                 if(tela_inicial.modo_selecao == 1) {
                     timer.interval = timer.interval - 500
@@ -437,6 +457,7 @@ Rectangle {
                     timer2.restart()
                 }
             }
+            //Aumentar ou diminuir a imagem
             else if(event.key === Qt.Key_G) {
                 if(tela_inicial.tamanho_imagem < 230) {
                     tela_inicial.tamanho_imagem = tela_inicial.tamanho_imagem + 10
@@ -449,6 +470,7 @@ Rectangle {
                     tela_inicial.tamanho_imagem_selecionada = tela_inicial.tamanho_imagem_selecionada - 5
                 }
             }
+            //Mudar o as imagens para vertical ou horizontal
             else if(event.key === Qt.Key_V) {
                 path.path = tela_inicial.vertical
                 tela_inicial.contador_x = 660
@@ -469,7 +491,7 @@ Rectangle {
     }
 
     states: [
-         State {
+        State {
              name: "TELA_INICIAL"
              PropertyChanges {
                  target: tela_mensagem
@@ -480,7 +502,8 @@ Rectangle {
                  z: 1
              }
          },
-         State {
+
+        State {
              name: "TELA_MENSAGEM"
              PropertyChanges {
                  target: tela_mensagem
@@ -517,6 +540,7 @@ Rectangle {
          }
      ]
 
+    //Transição entre as telas
      transitions: [
          Transition {
              to: "TELA_INICIAL"

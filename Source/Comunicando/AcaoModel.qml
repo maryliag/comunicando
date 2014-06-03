@@ -7,12 +7,15 @@ import QtQuick 2.2
 // Azul: adjetivos
 // Branco: demais
 
+//Lista de elementos possiveis para ações/falas dos usuários
 ListModel {
+    //Lista de Necessidades
     ListElement {
         name: "Necessidade"
         cor: "orange"
         type: "menu"
         image: "resources/necessidade.png"
+
         subItems: [
             ListElement {
                 name: "Voltar"
@@ -20,18 +23,21 @@ ListModel {
                 type: "submenu"
                 image: "resources/voltar.png"
             },
+
             ListElement {
                 name: "Bebida"
                 cor: "orange"
                 type: "submenu"
                 image: "resources/bebida.png"
             },
+
             ListElement {
                 name: "Comida"
                 cor: "orange"
                 type: "submenu"
                 image: "resources/comida.png"
             },
+
             ListElement {
                 name: "Banheiro"
                 cor: "orange"
@@ -40,6 +46,7 @@ ListModel {
             }
         ]
     }
+//Lista de elementos para expressar dores
     ListElement {
         name: "Dor"
         cor: "pink"
@@ -78,6 +85,7 @@ ListModel {
             }
         ]
     }
+    //Lista de pessoas
     ListElement {
         name: "Pessoa"
         cor: "yellow"
@@ -110,6 +118,8 @@ ListModel {
             }
         ]
     }
+
+    //Realizar alguma atividade
     ListElement {
         name: "Atividade"
         cor: "green"
@@ -142,6 +152,8 @@ ListModel {
             }
         ]
     }
+
+    //Lista de como o usuário está se sentindo
     ListElement {
         name: "Sentimento"
         cor: "blue"
@@ -180,6 +192,7 @@ ListModel {
             }
         ]
     }
+    //Lista de maus tratos
     ListElement {
         name: "Maus Tratos"
         cor: "dark red"
