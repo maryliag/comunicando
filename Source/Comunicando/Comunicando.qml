@@ -116,12 +116,12 @@ Rectangle {
 
         //Modo de vizualização horizontal e Vertical
         property Path horizontal: Path {
-            startX: 50; startY: 200
-            PathLine { x: 950; y: 200; }
+            startX: 25; startY: 200
+            PathLine { x: 965; y: 200; }
         }
         property Path vertical: Path {
-            startX: 425; startY: 40
-            PathLine { x: 425; y: 845; }
+            startX: 425; startY: 15
+            PathLine { x: 425; y: 800; }
         }
         //Feedback para o usuário que ele selecinou uma imagem no canto superior esquerdo
         //Primeira e segunda imagens selecionadas
@@ -243,37 +243,37 @@ Rectangle {
         Image {
             id: setaDireita1
             x: 5
-            y: 275
-            width: 50
-            height: 100
+            y: 300
+            width: 25
+            height: 50
             source: "resources/setaParaDireita.png"
         }
 
         Image {
             id: setaDireita2
             x: 925
-            y: 275
-            width: 50
-            height: 100
+            y: 300
+            width: 25
+            height: 50
             source: "resources/setaParaDireita.png"
         }
 
         Image {
             id: setaBaixo1
-            x: 500
+            x: 525
             y: 2
-            width: 100
-            height: 50
+            width: 50
+            height: 25
             source: "resources/setaParaBaixo.png"
             visible: false
         }
 
         Image {
             id: setaBaixo2
-            x: 500
-            y: 845
-            width: 100
-            height: 50
+            x: 525
+            y: 805
+            width: 50
+            height: 25
             source: "resources/setaParaBaixo.png"
             visible: false
         }
