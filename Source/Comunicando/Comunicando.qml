@@ -95,13 +95,15 @@ Rectangle {
                         tempo_selecao.text = timer2.interval/1000
                     }
 
-                    if(path.path == tela_inicial.horizontal) {
+                    if(path.path == tela_inicial.horizontalConfirmacao) {
                         setaDireita1.visible = true
                         setaDireita2.visible = true
+                        path.path = tela_inicial.horizontal
                     }
                     else {
                         setaBaixo1.visible = true
                         setaBaixo2.visible = true
+                        path.path = tela_inicial.vertical
                     }
                 }
             }
@@ -131,6 +133,14 @@ Rectangle {
         property Path vertical: Path {
             startX: 425; startY: 15
             PathLine { x: 425; y: 800; }
+        }
+        property Path horizontalConfirmacao: Path {
+            startX: 0; startY: 200
+            PathLine { x: 600; y: 200; }
+        }
+        property Path verticalConfirmacao: Path {
+            startX: 425; startY: 0
+            PathLine { x: 425; y: 600; }
         }
         //Feedback para o usuário que ele selecinou uma imagem no canto superior esquerdo
         //Primeira e segunda imagens selecionadas
@@ -377,7 +387,7 @@ Rectangle {
                                 menu_selecionado2.text = ""
                                 imagem2.color = "white"
                                 imagem2Opcao.source = ""
-                                if(path.path == tela_inicial.horizontal) {
+                                if(path.path == tela_inicial.horizontalConfirmacao) {
                                     setaDireita1.visible = true
                                     setaDireita2.visible = true
                                 }
@@ -385,6 +395,7 @@ Rectangle {
                                     setaBaixo1.visible = true
                                     setaBaixo2.visible = true
                                 }
+
                             }
                             else {
                                 programa.state = "TELA_MENSAGEM"
@@ -448,6 +459,22 @@ Rectangle {
                         path.model = path.children[i].getSubItens()
                         timer2.restart()
                         tempo_selecao.text = timer2.interval/1000
+                        if(path.children[i].getType() === "confirmacao") {
+                            if(path.path == tela_inicial.horizontal) {
+                                path.path = tela_inicial.horizontalConfirmacao
+                            }
+                            else if(path.path == tela_inicial.vertical){
+                                path.path = tela_inicial.verticalConfirmacao
+                            }
+                        }
+                        else {
+                            if(path.path == tela_inicial.horizontalConfirmacao) {
+                                path.path = tela_inicial.horizontal
+                            }
+                            else if(path.path == tela_inicial.verticalConfirmacao) {
+                                path.path = tela_inicial.vertical
+                            }
+                        }
                     }
                 }
             }
@@ -482,6 +509,22 @@ Rectangle {
                                 if(path.children[i].PathView.isCurrentItem){
                                     path.children[i].seleciona()
                                     path.model = path.children[i].getSubItens()
+                                    if(path.children[i].getType() === "confirmacao") {
+                                        if(path.path == tela_inicial.horizontal) {
+                                            path.path = tela_inicial.horizontalConfirmacao
+                                        }
+                                        else if(path.path == tela_inicial.vertical){
+                                            path.path = tela_inicial.verticalConfirmacao
+                                        }
+                                    }
+                                    else {
+                                        if(path.path == tela_inicial.horizontalConfirmacao) {
+                                            path.path = tela_inicial.horizontal
+                                        }
+                                        else if(path.path == tela_inicial.verticalConfirmacao) {
+                                            path.path = tela_inicial.vertical
+                                        }
+                                    }
                                 }
                                 timer.start()
                             }
