@@ -5,7 +5,7 @@ import QtQuick.Controls.Styles 1.1
 Rectangle {
     //Descrição da tela principal
     id: programa
-    width: 1000
+    width: 1200
     height: 900
     state: "TELA_INICIAL"
     //Confirmação do grupo de objetos selecionadas, inicialmente colocamos apenas dois
@@ -93,6 +93,15 @@ Rectangle {
                     if(tela_inicial.modo_selecao == 2) {
                         timer2.restart()
                         tempo_selecao.text = timer2.interval/1000
+                    }
+
+                    if(path.path == tela_inicial.horizontal) {
+                        setaDireita1.visible = true
+                        setaDireita2.visible = true
+                    }
+                    else {
+                        setaBaixo1.visible = true
+                        setaBaixo2.visible = true
                     }
                 }
             }
@@ -247,6 +256,13 @@ Rectangle {
             width: 25
             height: 50
             source: "resources/setaParaDireita.png"
+            PropertyAnimation on opacity  {
+                easing.type: Easing.OutSine
+                loops: Animation.Infinite
+                from: 0
+                to: 1.0
+                duration: 2000
+            }
         }
 
         Image {
@@ -256,6 +272,13 @@ Rectangle {
             width: 25
             height: 50
             source: "resources/setaParaDireita.png"
+            PropertyAnimation on opacity  {
+                easing.type: Easing.OutSine
+                loops: Animation.Infinite
+                from: 0
+                to: 1.0
+                duration: 2000
+            }
         }
 
         Image {
@@ -266,6 +289,13 @@ Rectangle {
             height: 25
             source: "resources/setaParaBaixo.png"
             visible: false
+            PropertyAnimation on opacity  {
+                easing.type: Easing.OutSine
+                loops: Animation.Infinite
+                from: 0
+                to: 1.0
+                duration: 2000
+            }
         }
 
         Image {
@@ -276,6 +306,13 @@ Rectangle {
             height: 25
             source: "resources/setaParaBaixo.png"
             visible: false
+            PropertyAnimation on opacity  {
+                easing.type: Easing.OutSine
+                loops: Animation.Infinite
+                from: 0
+                to: 1.0
+                duration: 2000
+            }
         }
 
         Component {
@@ -326,6 +363,10 @@ Rectangle {
                                 menu_selecionado2.text = name
                                 imagem2.color = cor
                                 imagem2Opcao.source = image
+                                setaDireita1.visible = false
+                                setaDireita2.visible = false
+                                setaBaixo1.visible = false
+                                setaBaixo2.visible = false
                             }
                         }
                         else {
@@ -336,6 +377,14 @@ Rectangle {
                                 menu_selecionado2.text = ""
                                 imagem2.color = "white"
                                 imagem2Opcao.source = ""
+                                if(path.path == tela_inicial.horizontal) {
+                                    setaDireita1.visible = true
+                                    setaDireita2.visible = true
+                                }
+                                else {
+                                    setaBaixo1.visible = true
+                                    setaBaixo2.visible = true
+                                }
                             }
                             else {
                                 programa.state = "TELA_MENSAGEM"
@@ -511,27 +560,32 @@ Rectangle {
             //Mudar a varredura para vertical ou horizontal
             else if(event.key === Qt.Key_V) {
                 path.path = tela_inicial.vertical
-                tela_inicial.contador_x = 660
+                tela_inicial.contador_x = 700
                 tela_inicial.contador_y = 400
                 imagem2.x = 0
                 imagem2.y = 160
                 texto_posicionamento.text = "Modo posicionamento das imagens: vertical"
-                setaDireita1.visible = false
-                setaDireita2.visible = false
-                setaBaixo1.visible = true
-                setaBaixo2.visible = true
+                if(menu_selecionado2.text === "") {
+                    setaDireita1.visible = false
+                    setaDireita2.visible = false
+                    setaBaixo1.visible = true
+                    setaBaixo2.visible = true
+                }
             }
             else if(event.key === Qt.Key_H) {
+                path.path = tela_inicial.horizontal
                 path.path = tela_inicial.horizontal
                 tela_inicial.contador_x = 480
                 tela_inicial.contador_y = 170
                 imagem2.x = 160
                 imagem2.y = 0
                 texto_posicionamento.text = "Modo posicionamento das imagens: horizontal"
-                setaDireita1.visible = true
-                setaDireita2.visible = true
-                setaBaixo1.visible = false
-                setaBaixo2.visible = false
+                if(menu_selecionado2.text === "") {
+                    setaDireita1.visible = true
+                    setaDireita2.visible = true
+                    setaBaixo1.visible = false
+                    setaBaixo2.visible = false
+                }
             }
         }
     }
