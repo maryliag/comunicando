@@ -8,12 +8,12 @@ Rectangle {
     width: 1000
     height: 900
     state: "TELA_INICIAL"
-    //Confirmacao do grupo de objetos selecionadas, inicialmente colocamos apenas dois
+    //Confirmação do grupo de objetos selecionadas, inicialmente colocamos apenas dois
     Rectangle {
         id: tela_mensagem
         anchors.fill: parent
         z: 0
-        //Primeiro objeto selecionado e sua descricao
+        //Primeiro objeto selecionado e sua descrição
         Rectangle {
             id: selecionado1
             width: 250
@@ -43,7 +43,7 @@ Rectangle {
                 }
             }
         }
-        //Segundo Objeto seleciionado
+        //Segundo objeto selecionado
         Rectangle {
             id: selecionado2
             width: 250
@@ -71,7 +71,7 @@ Rectangle {
                 }
             }
         }
-        //Botao de retorno para tela inicial
+        //Botão de retorno para tela inicial
         Button {
             id: botaoOk
             text: "Ok"
@@ -110,21 +110,21 @@ Rectangle {
         property int contador_x: 480
         property int contador_y: 170
 
-        //Inicializando as suas listas de elementos
+        //Definindo as listas de elementos
         property ListModel modelo: AcaoModel{}
         property ListModel confirmacao: ConfirmacaoModel{}
 
         //Modo de vizualização horizontal e Vertical
         property Path horizontal: Path {
-            startX: 0; startY: 200
-            PathLine { x: 1000; y: 200; }
+            startX: 50; startY: 200
+            PathLine { x: 950; y: 200; }
         }
         property Path vertical: Path {
-            startX: 425; startY: 0
-            PathLine { x: 425; y: 800; }
+            startX: 425; startY: 40
+            PathLine { x: 425; y: 845; }
         }
-        //Feedback para o usuário que ele selecinou a primeira imagem no canto superior esquerdo
-        //Primeira e segunda imagem selecionada
+        //Feedback para o usuário que ele selecinou uma imagem no canto superior esquerdo
+        //Primeira e segunda imagens selecionadas
         Rectangle {
             id: imagem1
             width: 150
@@ -176,7 +176,7 @@ Rectangle {
             }
         }
 
-        //Texto explicando funcionamento algumas ação
+        //Texto explicando funcionamento do botão no canto superior esquerdo
         Text {
             id: explicacaos_modo
             x: 780
@@ -238,6 +238,44 @@ Rectangle {
             x: 10
             y: 740
             text: "*Aperte G/P para aumentar/diminuir o tamanho das\nimagens"
+        }
+
+        Image {
+            id: setaDireita1
+            x: 5
+            y: 275
+            width: 50
+            height: 100
+            source: "resources/setaParaDireita.png"
+        }
+
+        Image {
+            id: setaDireita2
+            x: 925
+            y: 275
+            width: 50
+            height: 100
+            source: "resources/setaParaDireita.png"
+        }
+
+        Image {
+            id: setaBaixo1
+            x: 500
+            y: 2
+            width: 100
+            height: 50
+            source: "resources/setaParaBaixo.png"
+            visible: false
+        }
+
+        Image {
+            id: setaBaixo2
+            x: 500
+            y: 845
+            width: 100
+            height: 50
+            source: "resources/setaParaBaixo.png"
+            visible: false
         }
 
         Component {
@@ -412,7 +450,7 @@ Rectangle {
     //Ações para os botões de ajustes do sistema para o cuidador
 
         Keys.onPressed: {
-            //Navegação entre o modo de varedura automatica e varedura com um timer para seleção
+            //Navegação entre o modo de varedura automática e varredura com um timer para seleção
             if (event.key === Qt.Key_1) {
                 tela_inicial.modo_selecao = 1
                 texto_modo_selecao.text = "Modo de seleção: varredura"
@@ -433,7 +471,7 @@ Rectangle {
                 timer2.start()
                 timer.stop()
             }
-            //Aumentar ou diminuir o tempo de vareduara
+            //Aumentar ou diminuir o tempo de varredura
             else if(event.key === Qt.Key_Left) {
                 if(tela_inicial.modo_selecao == 1) {
                     timer.interval = timer.interval - 500
@@ -470,7 +508,7 @@ Rectangle {
                     tela_inicial.tamanho_imagem_selecionada = tela_inicial.tamanho_imagem_selecionada - 5
                 }
             }
-            //Mudar o as imagens para vertical ou horizontal
+            //Mudar a varredura para vertical ou horizontal
             else if(event.key === Qt.Key_V) {
                 path.path = tela_inicial.vertical
                 tela_inicial.contador_x = 660
@@ -478,6 +516,10 @@ Rectangle {
                 imagem2.x = 0
                 imagem2.y = 160
                 texto_posicionamento.text = "Modo posicionamento das imagens: vertical"
+                setaDireita1.visible = false
+                setaDireita2.visible = false
+                setaBaixo1.visible = true
+                setaBaixo2.visible = true
             }
             else if(event.key === Qt.Key_H) {
                 path.path = tela_inicial.horizontal
@@ -486,6 +528,10 @@ Rectangle {
                 imagem2.x = 160
                 imagem2.y = 0
                 texto_posicionamento.text = "Modo posicionamento das imagens: horizontal"
+                setaDireita1.visible = true
+                setaDireita2.visible = true
+                setaBaixo1.visible = false
+                setaBaixo2.visible = false
             }
         }
     }
