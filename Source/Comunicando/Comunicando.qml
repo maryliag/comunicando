@@ -176,7 +176,7 @@ Rectangle {
             }
         }
 
-        //Texto explicando funcionamento do botão no canto superior esquerdo
+        //Texto explicando funcionamento do botão no canto superior direito
         Text {
             id: explicacaos_modo
             x: 780
