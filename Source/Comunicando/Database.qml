@@ -19,6 +19,7 @@ Item {
 
     function removerCategoria(id) {
         executarQuery("DELETE FROM categoria WHERE id=?", [id]);
+        executarQuery("DELETE FROM acao WHERE categoriaId=?", [id]);
     }
 
     //
