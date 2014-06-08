@@ -1,13 +1,46 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
+import QtQuick.Layouts 1.0
 
 Rectangle {
     //Descrição da tela principal
     id: programa
-    width: 1200
-    height: 900
+    anchors.fill: parent
     state: "TELA_INICIAL"
+
+    StatusBar {
+        id: statusBar
+        RowLayout {
+            spacing: 10
+
+            Label {
+                text: {
+                    var modoSelecao = tela_inicial.modo_selecao == 1 ? "Varredura" : "Contagem Regressiva";
+                    return "Modo de seleção: " + modoSelecao;
+                }
+            }
+            Label { text: "||" }
+            Label {
+                            text: {
+                                var timerAtual = tela_inicial.modo_selecao == 1 ? timer : timer2;
+                                return "Tempo: " + timerAtual.interval / 1000 + "s"
+                            }
+                        }
+            Label { text: "||" }
+            Label {
+                text: {
+                    var orientacao = path.path == tela_inicial.horizontal ? "Horizontal" : "Vertical";
+                    return "Orientação: " + orientacao;
+                }
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        main_window.statusBar = statusBar;
+    }
+
     //Confirmação do grupo de objetos selecionadas, inicialmente colocamos apenas dois
     Rectangle {
         id: tela_mensagem
@@ -112,6 +145,7 @@ Rectangle {
 
     //Construção da tela inicial
     Rectangle {
+        focus: true
         id: tela_inicial
         anchors.fill: parent
         z: 1
@@ -122,7 +156,7 @@ Rectangle {
         property int contador_y: 170
 
         //Definindo as listas de elementos
-        property ListModel modelo: AcaoModel{}
+        property ListModel modelo: ListModel { }
         property ListModel confirmacao: ConfirmacaoModel{}
 
         //Modo de vizualização horizontal e Vertical
@@ -199,8 +233,8 @@ Rectangle {
         Text {
             id: explicacaos_modo
             x: 780
-            y: 100
-            text: "Espere a opção desejada e\nclique na área preta"
+            y: 50
+            text: "Espere a opção desejada e\nclique tela"
         }
 
         Text {
@@ -211,52 +245,10 @@ Rectangle {
         }
 
         Text {
-            id: texto_modo_selecao
-            x: 10
-            y: 520
-            font.bold: true
-            text: "Modo de seleção: varredura"
-        }
-
-        Text {
-            x: 10
-            y: 540
-            text: "*Aperte 1 para escolher o modo de seleção de varredura\nou 2 para o de contagem regressiva"
-        }
-
-        Text {
-            id: texto_timer
-            x: 10
-            y: 600
-            font.bold: true
-            text: "Tempo: " + timer.interval / 1000 + "s"
-        }
-
-        Text {
-            id: explicacao_tempo
-            x: 10
-            y: 620
-            text: "*Aperte as setas para esq/dir para diminuir/aumentar\na velocidade"
-        }
-
-        Text {
             id: texto_posicionamento
             x: 10
             y: 680
             font.bold: true
-            text: "Modo posicionamento das imagens: horizontal"
-        }
-
-        Text {
-            x: 10
-            y: 700
-            text: "*Aperte V/H para escolher o modo vertical/horizontal"
-        }
-
-        Text {
-            x: 10
-            y: 740
-            text: "*Aperte G/P para aumentar/diminuir o tamanho das\nimagens"
         }
 
         Image {
@@ -438,13 +430,16 @@ Rectangle {
             preferredHighlightBegin: 0.35
             preferredHighlightEnd: 0.65
             path: tela_inicial.horizontal
-            focus: true
             Timer {
                 id: timer
                 interval: 4000; running: true; repeat: true
                 onTriggered: {
                     path.decrementCurrentIndex()
                 }
+            }
+
+            Component.onCompleted: {
+                database.popularListModel(tela_inicial.modelo);
             }
         }
 
@@ -492,51 +487,45 @@ Rectangle {
             }
         }
 
-        Rectangle {
-                x: 820
-                width: 100
-                height: 100
-                color: "black"
-                border.color: "black"
-                border.width: 10
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        if(tela_inicial.modo_selecao === 1) {
-                            timer.stop()
-                            for(var i = 0; i < path.children.length; ++i)
-                            {
-                                if(path.children[i].PathView.isCurrentItem){
-                                    path.children[i].seleciona()
-                                    path.model = path.children[i].getSubItens()
-                                    if(path.children[i].getType() === "confirmacao") {
-                                        if(path.path == tela_inicial.horizontal) {
-                                            path.path = tela_inicial.horizontalConfirmacao
-                                        }
-                                        else if(path.path == tela_inicial.vertical){
-                                            path.path = tela_inicial.verticalConfirmacao
-                                        }
-                                    }
-                                    else {
-                                        if(path.path == tela_inicial.horizontalConfirmacao) {
-                                            path.path = tela_inicial.horizontal
-                                        }
-                                        else if(path.path == tela_inicial.verticalConfirmacao) {
-                                            path.path = tela_inicial.vertical
-                                        }
-                                    }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if(tela_inicial.modo_selecao === 1) {
+                    timer.stop()
+                    for(var i = 0; i < path.children.length; ++i)
+                    {
+                        if(path.children[i].PathView.isCurrentItem){
+                            path.children[i].seleciona()
+                            path.model = path.children[i].getSubItens()
+                            if(path.children[i].getType() === "confirmacao") {
+                                if(path.path == tela_inicial.horizontal) {
+                                    path.path = tela_inicial.horizontalConfirmacao
                                 }
-                                timer.start()
+                                else if(path.path == tela_inicial.vertical){
+                                    path.path = tela_inicial.verticalConfirmacao
+                                }
+                            }
+                            else {
+                                if(path.path == tela_inicial.horizontalConfirmacao) {
+                                    path.path = tela_inicial.horizontal
+                                }
+                                else if(path.path == tela_inicial.verticalConfirmacao) {
+                                    path.path = tela_inicial.vertical
+                                }
                             }
                         }
-                        else {
-                            path.decrementCurrentIndex()
-                            timer2.restart()
-                            tempo_selecao.text = timer2.interval/1000
-                        }
+                        timer.start()
                     }
                 }
+                else {
+                    path.decrementCurrentIndex()
+                    timer2.restart()
+                    tempo_selecao.text = timer2.interval/1000
+                }
+            }
         }
+
 
 
     //Ações para os botões de ajustes do sistema para o cuidador
@@ -546,9 +535,8 @@ Rectangle {
             if (event.key === Qt.Key_1) {
                 tela_inicial.modo_selecao = 1
                 texto_modo_selecao.text = "Modo de seleção: varredura"
-                texto_timer.text = "Tempo: " + timer.interval / 1000 + "s"
                 explicacao_tempo.text = "*Aperte as setas para esq/dir para diminuir/aumentar\na velocidade"
-                explicacaos_modo.text = "Espere a opção desejada e\nclique na área preta"
+                explicacaos_modo.text = "Espere a opção desejada e\nclique na tela"
                 tempo_selecao.text = ""
                 timer.start()
                 timer2.stop()
@@ -556,9 +544,8 @@ Rectangle {
             else if(event.key === Qt.Key_2) {
                 tela_inicial.modo_selecao = 2
                 texto_modo_selecao.text = "Modo de seleção: contagem regressiva"
-                texto_timer.text = "Tempo: " + timer2.interval / 1000 + "s"
                 explicacao_tempo.text = "*Aperte as setas para esq/dir para diminuir/aumentar\no tempo"
-                explicacaos_modo.text = "Clique na área preta até chegar\nna opção desejada e aguarde"
+                explicacaos_modo.text = "Clique na tela até chegar\nna opção desejada e aguarde"
                 tempo_selecao.text = timer2.interval/1000
                 timer2.start()
                 timer.stop()
@@ -567,10 +554,8 @@ Rectangle {
             else if(event.key === Qt.Key_Left) {
                 if(tela_inicial.modo_selecao == 1) {
                     timer.interval = timer.interval - 500
-                    texto_timer.text = "Tempo: " + timer.interval / 1000 + "s"
                 } else {
                     timer2.interval = timer2.interval - 500
-                    texto_timer.text = "Tempo: " + timer2.interval / 1000 + "s"
                     tempo_selecao.text = timer2.interval/1000
                     timer2.restart()
                 }
@@ -579,10 +564,8 @@ Rectangle {
             else if(event.key === Qt.Key_Right) {
                 if(tela_inicial.modo_selecao == 1) {
                     timer.interval = timer.interval + 500
-                    texto_timer.text = "Tempo: " + timer.interval / 1000 + "s"
                 } else {
                     timer2.interval = timer2.interval + 500
-                    texto_timer.text = "Tempo: " + timer2.interval / 1000 + "s"
                     tempo_selecao.text = timer2.interval/1000
                     timer2.restart()
                 }
@@ -607,7 +590,6 @@ Rectangle {
                 tela_inicial.contador_y = 400
                 imagem2.x = 0
                 imagem2.y = 160
-                texto_posicionamento.text = "Modo posicionamento das imagens: vertical"
                 if(menu_selecionado2.text === "") {
                     setaDireita1.visible = false
                     setaDireita2.visible = false
@@ -622,7 +604,6 @@ Rectangle {
                 tela_inicial.contador_y = 170
                 imagem2.x = 160
                 imagem2.y = 0
-                texto_posicionamento.text = "Modo posicionamento das imagens: horizontal"
                 if(menu_selecionado2.text === "") {
                     setaDireita1.visible = true
                     setaDireita2.visible = true
