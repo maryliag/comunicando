@@ -7,7 +7,7 @@ Rectangle {
     //Descrição da tela principal
     id: programa
     anchors.fill: parent
-
+/*
     StatusBar {
         id: statusBar
         RowLayout {
@@ -32,12 +32,13 @@ Rectangle {
     Component.onCompleted: {
         main_window.statusBar = statusBar;
     }
-
+*/
     //Construção da tela inicial
     Rectangle {
         focus: true
         id: tela_inicial
         anchors.fill: parent
+        state: "EDIT"
         property int modo_selecao: 1
         property int tamanho_imagem: 150
         property int tamanho_imagem_selecionada: 75
@@ -49,14 +50,314 @@ Rectangle {
         property ListModel acaoModel: AcaoModel {}
         property ListModel confirmacao: ConfirmacaoModel{}
 
+        Rectangle {
+            id: edit
+            width: parent.width
+            height: parent.height * 0.3
+            border.color: "black"
+            border.width: 10
+        }
+        Rectangle {
+            id: quadrado_1
+            width: parent.width / 2
+            height: parent.height * 0.3
+            anchors.top: edit.bottom
+            property string nome: tela_inicial.acaoModel.get(0).name
+            property string cor: tela_inicial.acaoModel.get(0).cor
+            property string imagem: tela_inicial.acaoModel.get(0).image
+            Rectangle {
+                id: item_1
+                anchors.fill: parent
+                border.color: "black"
+                border.width: 10
+                color: quadrado_1.cor
+                Image {
+                    width: item_1.width * 0.6
+                    height: item_1.height * 0.6
+                    anchors.centerIn: parent
+                    source: quadrado_1.imagem
+                }
+                Text{
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: parent.y + parent.height * 0.85
+                    text: quadrado_1.nome
+                    font.bold: true
+                    scale: 2
+                }
+            }
+        }
+        Rectangle {
+            id: quadrado_2
+            width: parent.width / 2
+            height: parent.height * 0.3
+            anchors.top: edit.bottom
+            anchors.left: quadrado_1.right
+            property string nome: tela_inicial.acaoModel.get(1).name
+            property string cor: tela_inicial.acaoModel.get(1).cor
+            property string imagem: tela_inicial.acaoModel.get(1).image
+            Rectangle {
+                id: item_2
+                anchors.fill: parent
+                border.color: "black"
+                border.width: 10
+                color: quadrado_2.cor
+                Image {
+                    width: item_2.width * 0.6
+                    height: item_2.height * 0.6
+                    anchors.centerIn: parent
+                    source: quadrado_2.imagem
+                }
+                Text{
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: parent.y + parent.height * 0.85
+                    text: quadrado_2.nome
+                    font.bold: true
+                    scale: 2
+                }
+            }
+        }
+        Rectangle {
+            id: quadrado_3
+            width: parent.width / 2
+            height: parent.height * 0.3
+            anchors.top: quadrado_1.bottom
+            property string nome: tela_inicial.acaoModel.get(2).name
+            property string cor: tela_inicial.acaoModel.get(2).cor
+            property string imagem: tela_inicial.acaoModel.get(2).image
+            Rectangle {
+                id: item_3
+                anchors.fill: parent
+                border.color: "black"
+                border.width: 10
+                color: quadrado_3.cor
+                Image {
+                    width: item_3.width * 0.6
+                    height: item_3.height * 0.6
+                    anchors.centerIn: parent
+                    source: quadrado_3.imagem
+                }
+                Text{
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: parent.y + parent.height * 0.85
+                    text: quadrado_3.nome
+                    font.bold: true
+                    scale: 2
+                }
+            }
+        }
+        Rectangle {
+            id: quadrado_4
+            width: parent.width / 2
+            height: parent.height * 0.3
+            anchors.top: quadrado_2.bottom
+            anchors.left: quadrado_3.right
+            property string nome: tela_inicial.acaoModel.get(3).name
+            property string cor: tela_inicial.acaoModel.get(3).cor
+            property string imagem: tela_inicial.acaoModel.get(3).image
+            Rectangle {
+                id: item_4
+                anchors.fill: parent
+                border.color: "black"
+                border.width: 10
+                color: quadrado_4.cor
+                Image {
+                    width: item_4.width * 0.6
+                    height: item_4.height * 0.6
+                    anchors.centerIn: parent
+                    source: quadrado_4.imagem
+                }
+                Text{
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: parent.y + parent.height * 0.85
+                    text: quadrado_4.nome
+                    font.bold: true
+                    scale: 2
+                }
+            }
+        }
+        Rectangle {
+            id: path
+            width: parent.width
+            height: parent.height * 0.1
+            anchors.top: quadrado_3.bottom
+            border.color: "black"
+            border.width: 10
+        }
+
+        Timer {
+            id: timer
+            interval: 2000; running: true; repeat: true
+            onTriggered: {
+                if (tela_inicial.modo_selecao == 1){
+                    if(tela_inicial.state === "EDIT") {
+                        tela_inicial.state = "QUADRADO_1"
+                    }
+                    else if(tela_inicial.state === "QUADRADO_1") {
+                        tela_inicial.state = "QUADRADO_2"
+                    }
+                    else if(tela_inicial.state === "QUADRADO_2") {
+                        tela_inicial.state = "QUADRADO_3"
+                    }
+                    else if(tela_inicial.state === "QUADRADO_3") {
+                        tela_inicial.state = "QUADRADO_4"
+                    }
+                    else if(tela_inicial.state === "QUADRADO_4") {
+                        tela_inicial.state = "EDIT"
+                    }
+                }
+            }
+        }
+
+        states: [
+            State {
+                name: "EDIT"
+                PropertyChanges {
+                    target: edit
+                    border.color: "red"
+                }
+                PropertyChanges {
+                    target: item_1
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_2
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_3
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_4
+                    border.color: "black"
+                }
+            },
+            State {
+                name: "QUADRADO_1"
+                PropertyChanges {
+                    target: edit
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_1
+                    border.color: "red"
+                }
+                PropertyChanges {
+                    target: item_2
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_3
+                    border.color: "black"
+                }
+                   PropertyChanges {
+                    target: item_4
+                    border.color: "black"
+                }
+            },
+            State {
+                name: "QUADRADO_2"
+                PropertyChanges {
+                    target: edit
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_1
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_2
+                    border.color: "red"
+                }
+                PropertyChanges {
+                    target: item_3
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_4
+                    border.color: "black"
+                }
+            },
+            State {
+                name: "QUADRADO_3"
+                PropertyChanges {
+                    target: edit
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_1
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_2
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_3
+                    border.color: "red"
+                }
+                PropertyChanges {
+                    target: item_4
+                    border.color: "black"
+                }
+            },
+            State {
+                name: "QUADRADO_4"
+                PropertyChanges {
+                    target: edit
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_1
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_2
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_3
+                    border.color: "black"
+                }
+                PropertyChanges {
+                    target: item_4
+                    border.color: "red"
+                }
+            }
+        ]
+        //Transição entre as telas
+        transitions: [
+            Transition {
+                to: "EDIT"
+                PropertyAnimation { duration: 0 }
+            },
+            Transition {
+                to: "QUADRADO_1"
+                PropertyAnimation { duration: 0 }
+            },
+            Transition {
+                to: "QUADRADO_2"
+                PropertyAnimation { duration: 0 }
+            },
+            Transition {
+                to: "QUADRADO_3"
+                PropertyAnimation { duration: 0 }
+            },
+            Transition {
+                to: "QUADRADO_4"
+                PropertyAnimation { duration: 0 }
+            }
+        ]
+
+        /*
         Component {
             id: delegate
             Item {
                 id: wrapper
                 Rectangle {
                     id: rectangle
-                    width: grid.cellWidth
-                    height: grid.cellHeight
+                    width: grid.width / 2
+                    height: grid.height / 3
                     color: cor
                     border.color: wrapper.GridView.isCurrentItem ? "red" : "black"
                     border.width: 10
@@ -144,8 +445,8 @@ Rectangle {
             id: delegate_edit
             Item {
                 id: wrapper_edit
-                width: grid.cellWidth * 2
-                height: grid.cellHeight / 2
+                width: grid.width
+                height: grid.height / 6
                 Rectangle {
                     id: rectangle
                     anchors.fill: parent
@@ -165,8 +466,8 @@ Rectangle {
             id: delegate_path
             Item {
                 id: wrapper_path
-                width: grid.cellWidth * 2
-                height: grid.cellHeight / 2
+                width: grid.width
+                height: grid.height / 6
                 Rectangle {
                     id: rectangle
                     anchors.fill: parent
@@ -187,8 +488,6 @@ Rectangle {
             id: grid
             width: parent.width
             height: parent.height
-            cellWidth: parent.width / 2
-            cellHeight: parent.height / 3
             model: tela_inicial.acaoModel
             delegate: delegate
             header: delegate_edit
@@ -393,7 +692,7 @@ Rectangle {
                 imagem2.x = 160
                 imagem2.y = 0
             }
-        }
+        }*/
     }
 
 }
