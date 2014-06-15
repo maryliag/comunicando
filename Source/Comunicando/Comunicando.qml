@@ -22,16 +22,9 @@ Rectangle {
             }
             Label { text: "||" }
             Label {
-                            text: {
-                                var timerAtual = tela_inicial.modo_selecao == 1 ? timer : timer2;
-                                return "Tempo: " + timerAtual.interval / 1000 + "s"
-                            }
-                        }
-            Label { text: "||" }
-            Label {
                 text: {
-                    var orientacao = path.path == tela_inicial.horizontal ? "Horizontal" : "Vertical";
-                    return "Orientação: " + orientacao;
+                    var timerAtual = tela_inicial.modo_selecao == 1 ? timer : timer2;
+                    return "Tempo: " + timerAtual.interval / 1000 + "s"
                 }
             }
         }
@@ -126,17 +119,6 @@ Rectangle {
                     if(tela_inicial.modo_selecao == 2) {
                         timer2.restart()
                         tempo_selecao.text = timer2.interval/1000
-                    }
-
-                    if(path.path == tela_inicial.horizontalConfirmacao) {
-                        setaDireita1.visible = true
-                        setaDireita2.visible = true
-                        path.path = tela_inicial.horizontal
-                    }
-                    else {
-                        setaBaixo1.visible = true
-                        setaBaixo2.visible = true
-                        path.path = tela_inicial.vertical
                     }
                 }
             }
@@ -251,72 +233,6 @@ Rectangle {
             font.bold: true
         }
 
-        Image {
-            id: setaDireita1
-            x: 5
-            y: 300
-            width: 25
-            height: 50
-            source: "resources/setaParaDireita.png"
-            PropertyAnimation on opacity  {
-                easing.type: Easing.OutSine
-                loops: Animation.Infinite
-                from: 0
-                to: 1.0
-                duration: 2000
-            }
-        }
-
-        Image {
-            id: setaDireita2
-            x: 925
-            y: 300
-            width: 25
-            height: 50
-            source: "resources/setaParaDireita.png"
-            PropertyAnimation on opacity  {
-                easing.type: Easing.OutSine
-                loops: Animation.Infinite
-                from: 0
-                to: 1.0
-                duration: 2000
-            }
-        }
-
-        Image {
-            id: setaBaixo1
-            x: 525
-            y: 2
-            width: 50
-            height: 25
-            source: "resources/setaParaBaixo.png"
-            visible: false
-            PropertyAnimation on opacity  {
-                easing.type: Easing.OutSine
-                loops: Animation.Infinite
-                from: 0
-                to: 1.0
-                duration: 2000
-            }
-        }
-
-        Image {
-            id: setaBaixo2
-            x: 525
-            y: 805
-            width: 50
-            height: 25
-            source: "resources/setaParaBaixo.png"
-            visible: false
-            PropertyAnimation on opacity  {
-                easing.type: Easing.OutSine
-                loops: Animation.Infinite
-                from: 0
-                to: 1.0
-                duration: 2000
-            }
-        }
-
         Component {
             id: delegate
             Item {
@@ -326,7 +242,7 @@ Rectangle {
                     width: 250
                     height: 250
                     color: cor
-                    border.color: wrapper.PathView.isCurrentItem ? "red" : "black"
+                    border.color: wrapper.GridView.isCurrentItem ? "red" : "black"
                     border.width: 10
                     radius: 10
                     Image {
@@ -349,7 +265,7 @@ Rectangle {
                     }
                 }
                 function seleciona() {
-                    if(wrapper.PathView.isCurrentItem) {
+                    if(wrapper.GridView.isCurrentItem) {
                         if(menu_selecionado.text == "") {
                             menu_selecionado.text = name
                             imagem1.color = cor
@@ -365,10 +281,6 @@ Rectangle {
                                 menu_selecionado2.text = name
                                 imagem2.color = cor
                                 imagem2Opcao.source = image
-                                setaDireita1.visible = false
-                                setaDireita2.visible = false
-                                setaBaixo1.visible = false
-                                setaBaixo2.visible = false
                             }
                         }
                         else {
@@ -379,15 +291,6 @@ Rectangle {
                                 menu_selecionado2.text = ""
                                 imagem2.color = "white"
                                 imagem2Opcao.source = ""
-                                if(path.path == tela_inicial.horizontalConfirmacao) {
-                                    setaDireita1.visible = true
-                                    setaDireita2.visible = true
-                                }
-                                else {
-                                    setaBaixo1.visible = true
-                                    setaBaixo2.visible = true
-                                }
-
                             }
                             else {
                                 programa.state = "TELA_MENSAGEM"
@@ -421,20 +324,52 @@ Rectangle {
             }
         }
 
-        PathView {
-            id: path
-            anchors.fill: parent
+        GridView {
+            id: grid
+            x: 200
+            y: 200
+
+            width: 800
+            height: 600
+            keyNavigationWraps: true
+            flickableDirection: Flickable.AutoFlickDirection
+            highlightFollowsCurrentItem: false
             model: tela_inicial.modelo
+            cellWidth: 400
+            cellHeight: 420
             delegate: delegate
-            pathItemCount: 3
-            preferredHighlightBegin: 0.35
-            preferredHighlightEnd: 0.65
-            path: tela_inicial.horizontal
-            Timer {
-                id: timer
-                interval: 4000; running: true; repeat: true
-                onTriggered: {
-                    path.decrementCurrentIndex()
+            highlight: highlight
+            property int posicao_grid : 1
+
+
+            Component.onCompleted: {
+                database.popularListModel(tela_inicial.modelo);
+            }
+        }
+
+        Timer {
+            id: timer
+            interval: 2000; running: true; repeat: true
+            onTriggered: {
+                if (tela_inicial.modo_selecao == 1){
+                    if(grid.posicao_grid == 1){
+                        grid.moveCurrentIndexDown()
+                        grid.posicao_grid = 2
+                    }
+                    else if(grid.posicao_grid == 2){
+                        grid.moveCurrentIndexUp()
+                        grid.moveCurrentIndexRight()
+                        grid.posicao_grid = 3
+                    }
+                    else if(grid.posicao_grid == 3){
+                        grid.moveCurrentIndexDown()
+                        grid.posicao_grid = 4
+                    }
+                    else if(grid.posicao_grid == 4){
+                        grid.moveCurrentIndexUp()
+                        grid.moveCurrentIndexLeft()
+                        grid.posicao_grid = 1
+                    }
                 }
             }
 
@@ -447,27 +382,27 @@ Rectangle {
             id: timer2
             interval: 5000; running: false; repeat: false
             onTriggered: {
-                for(var i = 0; i < path.children.length; ++i)
+                for(var i = 0; i < grid.children.length; ++i)
                 {
-                    if(path.children[i].PathView.isCurrentItem){
-                        path.children[i].seleciona()
-                        path.model = path.children[i].getSubItens()
+                    if(grid.children[i].gridView.isCurrentItem){
+                        grid.children[i].seleciona()
+                        grid.model = grid.children[i].getSubItens()
                         timer2.restart()
                         tempo_selecao.text = timer2.interval/1000
-                        if(path.children[i].getType() === "confirmacao") {
-                            if(path.path == tela_inicial.horizontal) {
-                                path.path = tela_inicial.horizontalConfirmacao
+                        if(grid.children[i].getType() === "confirmacao") {
+                            if(grid.path == tela_inicial.horizontal) {
+                                grid.path = tela_inicial.horizontalConfirmacao
                             }
-                            else if(path.path == tela_inicial.vertical){
-                                path.path = tela_inicial.verticalConfirmacao
+                            else if(grid.path == tela_inicial.vertical){
+                                grid.path = tela_inicial.verticalConfirmacao
                             }
                         }
                         else {
-                            if(path.path == tela_inicial.horizontalConfirmacao) {
-                                path.path = tela_inicial.horizontal
+                            if(grid.path == tela_inicial.horizontalConfirmacao) {
+                                grid.path = tela_inicial.horizontal
                             }
-                            else if(path.path == tela_inicial.verticalConfirmacao) {
-                                path.path = tela_inicial.vertical
+                            else if(grid.path == tela_inicial.verticalConfirmacao) {
+                                grid.path = tela_inicial.vertical
                             }
                         }
                     }
@@ -493,33 +428,52 @@ Rectangle {
             onClicked: {
                 if(tela_inicial.modo_selecao === 1) {
                     timer.stop()
-                    for(var i = 0; i < path.children.length; ++i)
+                    for(var i = 0; i < grid.children.length; ++i)
                     {
-                        if(path.children[i].PathView.isCurrentItem){
-                            path.children[i].seleciona()
-                            path.model = path.children[i].getSubItens()
-                            if(path.children[i].getType() === "confirmacao") {
-                                if(path.path == tela_inicial.horizontal) {
-                                    path.path = tela_inicial.horizontalConfirmacao
-                                }
-                                else if(path.path == tela_inicial.vertical){
-                                    path.path = tela_inicial.verticalConfirmacao
-                                }
-                            }
-                            else {
-                                if(path.path == tela_inicial.horizontalConfirmacao) {
-                                    path.path = tela_inicial.horizontal
-                                }
-                                else if(path.path == tela_inicial.verticalConfirmacao) {
-                                    path.path = tela_inicial.vertical
-                                }
+                        if(grid.children[i].GridView.isCurrentItem){
+                            grid.children[i].seleciona()
+                            grid.model = grid.children[i].getSubItens()
+                            if(grid.children[i].getType() === "confirmacao") {
+                                //                                grid.path = tela_inicial.horizontalConfirmacao
+                                //                                if(grid.path == tela_inicial.horizontal) {
+                                //                                    grid.path = tela_inicial.horizontalConfirmacao
+                                //                                }
+                                //                                else if(grid.path == tela_inicial.vertical){
+                                //                                    grid.path = tela_inicial.verticalConfirmacao
+                                //                                }
+                                //                            }
+                                //                            else {
+                                //                                 grid.path = tela_inicial.horizontal
+                                //                                if(grid.path == tela_inicial.horizontalConfirmacao) {
+                                //                                    grid.path = tela_inicial.horizontal
+                                //                                }
+                                //                                else if(grid.path == tela_inicial.verticalConfirmacao) {
+                                //                                    grid.path = tela_inicial.vertical
+                                //                                }
                             }
                         }
                         timer.start()
                     }
                 }
                 else {
-                    path.decrementCurrentIndex()
+                    if(grid.posicao_grid == 1){
+                        grid.moveCurrentIndexDown()
+                        grid.posicao_grid = 2
+                    }
+                    else if(grid.posicao_grid == 2){
+                        grid.moveCurrentIndexUp()
+                        grid.moveCurrentIndexRight()
+                        grid.posicao_grid = 3
+                    }
+                    else if(grid.posicao_grid == 3){
+                        grid.moveCurrentIndexDown()
+                        grid.posicao_grid = 4
+                    }
+                    else if(grid.posicao_grid == 4){
+                        grid.moveCurrentIndexUp()
+                        grid.moveCurrentIndexLeft()
+                        grid.posicao_grid = 1
+                    }
                     timer2.restart()
                     tempo_selecao.text = timer2.interval/1000
                 }
@@ -528,7 +482,8 @@ Rectangle {
 
 
 
-    //Ações para os botões de ajustes do sistema para o cuidador
+
+        //Ações para os botões de ajustes do sistema para o cuidador
 
         Keys.onPressed: {
             //Navegação entre o modo de varedura automática e varredura com um timer para seleção
@@ -590,12 +545,6 @@ Rectangle {
                 tela_inicial.contador_y = 400
                 imagem2.x = 0
                 imagem2.y = 160
-                if(menu_selecionado2.text === "") {
-                    setaDireita1.visible = false
-                    setaDireita2.visible = false
-                    setaBaixo1.visible = true
-                    setaBaixo2.visible = true
-                }
             }
             else if(event.key === Qt.Key_H) {
                 path.path = tela_inicial.horizontal
@@ -604,75 +553,69 @@ Rectangle {
                 tela_inicial.contador_y = 170
                 imagem2.x = 160
                 imagem2.y = 0
-                if(menu_selecionado2.text === "") {
-                    setaDireita1.visible = true
-                    setaDireita2.visible = true
-                    setaBaixo1.visible = false
-                    setaBaixo2.visible = false
-                }
             }
         }
     }
 
     states: [
         State {
-             name: "TELA_INICIAL"
-             PropertyChanges {
-                 target: tela_mensagem
-                 z: 0
-             }
-             PropertyChanges {
-                 target: tela_inicial
-                 z: 1
-             }
-         },
+            name: "TELA_INICIAL"
+            PropertyChanges {
+                target: tela_mensagem
+                z: 0
+            }
+            PropertyChanges {
+                target: tela_inicial
+                z: 1
+            }
+        },
 
         State {
-             name: "TELA_MENSAGEM"
-             PropertyChanges {
-                 target: tela_mensagem
-                 z: 1
-             }
-             PropertyChanges {
-                 target: selecionado1
-                 color: imagem1.color
-             }
-             PropertyChanges {
-                 target: imagemSelecionada1
-                 source: imagem1Opcao.source
-             }
-             PropertyChanges {
-                 target: textoSelecionado1
-                 text:  menu_selecionado.text
-             }
-             PropertyChanges {
-                 target: selecionado2
-                 color: imagem2.color
-             }
-             PropertyChanges {
-                 target: imagemSelecionada2
-                 source: imagem2Opcao.source
-             }
-             PropertyChanges {
-                 target: textoSelecionado2
-                 text:  menu_selecionado2.text
-             }
-             PropertyChanges {
-                 target: tela_inicial
-                 z: 0
-             }
-         }
-     ]
+            name: "TELA_MENSAGEM"
+            PropertyChanges {
+                target: tela_mensagem
+                z: 1
+            }
+            PropertyChanges {
+                target: selecionado1
+                color: imagem1.color
+            }
+            PropertyChanges {
+                target: imagemSelecionada1
+                source: imagem1Opcao.source
+            }
+            PropertyChanges {
+                target: textoSelecionado1
+                text:  menu_selecionado.text
+            }
+            PropertyChanges {
+                target: selecionado2
+                color: imagem2.color
+            }
+            PropertyChanges {
+                target: imagemSelecionada2
+                source: imagem2Opcao.source
+            }
+            PropertyChanges {
+                target: textoSelecionado2
+                text:  menu_selecionado2.text
+            }
+            PropertyChanges {
+                target: tela_inicial
+                z: 0
+            }
+        }
+    ]
 
     //Transição entre as telas
-     transitions: [
-         Transition {
-             to: "TELA_INICIAL"
-             PropertyAnimation { duration: 0 }
-         },
-         Transition {
-             to: "TELA_MENSAGEM"
-             PropertyAnimation { duration: 0 }
-         }
-     ]
+    transitions: [
+        Transition {
+            to: "TELA_INICIAL"
+            PropertyAnimation { duration: 0 }
+        },
+        Transition {
+            to: "TELA_MENSAGEM"
+            PropertyAnimation { duration: 0 }
+        }
+    ]
 }
