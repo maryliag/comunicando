@@ -1,12 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
+import QtQuick.Window 2.0
 import QtQuick.Layouts 1.0
 
 ApplicationWindow {
     id: main_window
     title: "Comunicando"
-    width: 1200
-    height: 900
+    height: Screen.desktopAvailableHeight
+    width: (Screen.desktopAvailableHeight * 4) / 5
     menuBar: MenuBar {
         Menu {
             title: "Arquivo"
