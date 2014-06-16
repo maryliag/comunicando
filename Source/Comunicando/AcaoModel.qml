@@ -21,6 +21,7 @@ ListModel {
                 cor: "orange"
                 type: "submenu"
                 image: "resources/bebida.png"
+                subItems: []
             },
 
             ListElement {
@@ -28,6 +29,7 @@ ListModel {
                 cor: "orange"
                 type: "submenu"
                 image: "resources/comida.png"
+                subItems: []
             },
 
             ListElement {
@@ -35,6 +37,14 @@ ListModel {
                 cor: "orange"
                 type: "submenu"
                 image: "resources/banheiro.png"
+                subItems:[]
+            },
+            ListElement {
+                name: ""
+                cor: "white"
+                type: "submenu"
+                image: ""
+                subItems: []
             }
         ]
     }
@@ -50,18 +60,28 @@ ListModel {
                 cor: "yellow"
                 type: "submenu"
                 image: "resources/mae.png"
+                subItems: []
             },
             ListElement {
                 name: "Pai"
                 cor: "yellow"
                 type: "submenu"
                 image: "resources/pai.png"
+                subItems: []
             },
             ListElement {
                 name: "Cuidadora"
                 cor: "yellow"
                 type: "submenu"
                 image: "resources/cuidadora.png"
+                subItems: []
+            },
+            ListElement {
+                name: ""
+                cor: "white"
+                type: "submenu"
+                image: ""
+                subItems: []
             }
         ]
     }
@@ -78,18 +98,28 @@ ListModel {
                 cor: "green"
                 type: "submenu"
                 image: "resources/tv.png"
+                subItems: []
             },
             ListElement {
                 name: "Escutar uma História"
                 cor: "green"
                 type: "submenu"
                 image: "resources/historia.png"
+                subItems: []
             },
             ListElement {
                 name: "Jogar"
                 cor: "green"
                 type: "submenu"
                 image: "resources/jogar.png"
+                subItems: []
+            },
+            ListElement {
+                name: ""
+                cor: "white"
+                type: "submenu"
+                image: ""
+                subItems: []
             }
         ]
     }
@@ -100,31 +130,6 @@ ListModel {
         cor: "blue"
         type: "menu"
         image: "resources/sentimento.png"
-        subItems: [
-            ListElement {
-                name: "Feliz"
-                cor: "blue"
-                type: "submenu"
-                image: "resources/feliz.png"
-            },
-            ListElement {
-                name: "Triste"
-                cor: "blue"
-                type: "submenu"
-                image: "resources/triste.png"
-            },
-            ListElement {
-                name: "Saudade"
-                cor: "blue"
-                type: "submenu"
-                image: "resources/saudade.png"
-            },
-            ListElement {
-                name: "Tédio"
-                cor: "blue"
-                type: "submenu"
-                image: "resources/tedio.png"
-            }
-        ]
+        subItems: []
     }
 }

@@ -48,7 +48,9 @@ Rectangle {
         //Definindo as listas de elementos
         property ListModel modelo: ListModel { }
         property ListModel acaoModel: AcaoModel {}
+        property ListModel acaoModelBackup: AcaoModel{}
         property ListModel confirmacao: ConfirmacaoModel{}
+        property ListModel selecionados: ListModel {}
 
         Rectangle {
             id: edit
@@ -56,6 +58,39 @@ Rectangle {
             height: parent.height * 0.3
             border.color: "black"
             border.width: 10
+            PathView {
+                id: path
+                model: tela_inicial.selecionados
+                pathItemCount: 3
+                path: Path {
+                    startX: edit.height * 0.5; startY: edit.y + edit.height / 2
+                    PathLine { x: edit.width * 1.1; y: edit.y + edit.height / 2 }
+                }
+                delegate: Component {
+                    Rectangle {
+                        id: quadrado_selecionado
+                        width: edit.height * 0.8
+                        height: edit.height * 0.8
+                        color: cor
+                        border.color: "black"
+                        border.width: 5
+                        Image {
+                            id: selecionado_imagem
+                            width: quadrado_selecionado.width * 0.6
+                            height: quadrado_selecionado.height * 0.6
+                            anchors.centerIn: parent
+                            source: image
+                        }
+                        Text{
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: selecionado_imagem.bottom
+                            text: name
+                            font.bold: true
+                            scale: 2
+                        }
+                    }
+                }
+            }
         }
         Rectangle {
             id: quadrado_1
@@ -67,6 +102,7 @@ Rectangle {
             property string imagem: tela_inicial.acaoModel.get(0).image
             Rectangle {
                 id: item_1
+                z: 1
                 anchors.fill: parent
                 border.color: "black"
                 border.width: 10
@@ -85,6 +121,45 @@ Rectangle {
                     scale: 2
                 }
             }
+            property ListModel subItens: tela_inicial.acaoModel.get(0).subItems
+            Rectangle {
+                id: subitem_1
+                z: 0
+                anchors.fill: parent
+                border.color: "red"
+                border.width: 10
+                color: quadrado_1.cor
+                GridView {
+                    id: grid_1
+                    anchors.fill: parent
+                    cellWidth: parent.width / 2
+                    cellHeight: parent.height / 2
+                    model: quadrado_1.subItens
+                    delegate: Component {
+                        Rectangle {
+                            width: grid_1.cellWidth
+                            height: grid_1.cellHeight
+                            border.color: "red"
+                            border.width: 5
+                            color: cor
+                            Image {
+                                id: mini_imagem
+                                width: parent.width * 0.6
+                                height: parent.height * 0.6
+                                anchors.centerIn: parent
+                                source: image
+                            }
+                            Text{
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.top: mini_imagem.bottom
+                                text: name
+                                font.bold: true
+                                scale: 1.5
+                            }
+                        }
+                    }
+                }
+            }
         }
         Rectangle {
             id: quadrado_2
@@ -97,6 +172,7 @@ Rectangle {
             property string imagem: tela_inicial.acaoModel.get(1).image
             Rectangle {
                 id: item_2
+                z:1
                 anchors.fill: parent
                 border.color: "black"
                 border.width: 10
@@ -115,6 +191,45 @@ Rectangle {
                     scale: 2
                 }
             }
+            property ListModel subItens: tela_inicial.acaoModel.get(1).subItems
+            Rectangle {
+                id: subitem_2
+                z: 0
+                anchors.fill: parent
+                border.color: "red"
+                border.width: 10
+                color: quadrado_2.cor
+                GridView {
+                    id: grid_2
+                    anchors.fill: parent
+                    cellWidth: parent.width / 2
+                    cellHeight: parent.height / 2
+                    model: quadrado_2.subItens
+                    delegate: Component {
+                        Rectangle {
+                            width: grid_2.cellWidth
+                            height: grid_2.cellHeight
+                            border.color: "red"
+                            border.width: 5
+                            color: cor
+                            Image {
+                                id: mini_imagem
+                                width: parent.width * 0.6
+                                height: parent.height * 0.6
+                                anchors.centerIn: parent
+                                source: image
+                            }
+                            Text{
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.top: mini_imagem.bottom
+                                text: name
+                                font.bold: true
+                                scale: 1.5
+                            }
+                        }
+                    }
+                }
+            }
         }
         Rectangle {
             id: quadrado_3
@@ -126,6 +241,7 @@ Rectangle {
             property string imagem: tela_inicial.acaoModel.get(2).image
             Rectangle {
                 id: item_3
+                z: 1
                 anchors.fill: parent
                 border.color: "black"
                 border.width: 10
@@ -144,6 +260,45 @@ Rectangle {
                     scale: 2
                 }
             }
+            property ListModel subItens: tela_inicial.acaoModel.get(2).subItems
+            Rectangle {
+                id: subitem_3
+                z: 0
+                anchors.fill: parent
+                border.color: "red"
+                border.width: 10
+                color: quadrado_3.cor
+                GridView {
+                    id: grid_3
+                    anchors.fill: parent
+                    cellWidth: parent.width / 2
+                    cellHeight: parent.height / 2
+                    model: quadrado_3.subItens
+                    delegate: Component {
+                        Rectangle {
+                            width: grid_3.cellWidth
+                            height: grid_3.cellHeight
+                            border.color: "red"
+                            border.width: 5
+                            color: cor
+                            Image {
+                                id: mini_imagem
+                                width: parent.width * 0.6
+                                height: parent.height * 0.6
+                                anchors.centerIn: parent
+                                source: image
+                            }
+                            Text{
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.top: mini_imagem.bottom
+                                text: name
+                                font.bold: true
+                                scale: 1.5
+                            }
+                        }
+                    }
+                }
+            }
         }
         Rectangle {
             id: quadrado_4
@@ -155,6 +310,7 @@ Rectangle {
             property string cor: tela_inicial.acaoModel.get(3).cor
             property string imagem: tela_inicial.acaoModel.get(3).image
             Rectangle {
+                z: 1
                 id: item_4
                 anchors.fill: parent
                 border.color: "black"
@@ -174,9 +330,48 @@ Rectangle {
                     scale: 2
                 }
             }
+            property ListModel subItens: tela_inicial.acaoModel.get(3).subItems
+            Rectangle {
+                id: subitem_4
+                z: 0
+                anchors.fill: parent
+                border.color: "red"
+                border.width: 10
+                color: quadrado_4.cor
+                GridView {
+                    id: grid_4
+                    anchors.fill: parent
+                    cellWidth: parent.width / 2
+                    cellHeight: parent.height / 2
+                    model: quadrado_4.subItens
+                    delegate: Component {
+                        Rectangle {
+                            width: grid_4.cellWidth
+                            height: grid_4.cellHeight
+                            border.color: "red"
+                            border.width: 5
+                            color: cor
+                            Image {
+                                id: mini_imagem
+                                width: parent.width * 0.6
+                                height: parent.height * 0.6
+                                anchors.centerIn: parent
+                                source: image
+                            }
+                            Text{
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.top: mini_imagem.bottom
+                                text: name
+                                font.bold: true
+                                scale: 1.5
+                            }
+                        }
+                    }
+                }
+            }
         }
         Rectangle {
-            id: path
+            id: caminho
             width: parent.width
             height: parent.height * 0.1
             anchors.top: quadrado_3.bottom
@@ -191,19 +386,134 @@ Rectangle {
                 if (tela_inicial.modo_selecao == 1){
                     if(tela_inicial.state === "EDIT") {
                         tela_inicial.state = "QUADRADO_1"
+                        if(quadrado_1.subItens.count > 0) {
+                            item_1.z = 0
+                            subitem_1.z = 1
+                        }
                     }
                     else if(tela_inicial.state === "QUADRADO_1") {
                         tela_inicial.state = "QUADRADO_2"
+                        item_1.z = 1
+                        subitem_1.z = 0
+                        if(quadrado_2.subItens.count > 0) {
+                            item_2.z = 0
+                            subitem_2.z = 1
+                        }
                     }
                     else if(tela_inicial.state === "QUADRADO_2") {
                         tela_inicial.state = "QUADRADO_3"
+                        item_2.z = 1
+                        subitem_2.z = 0
+                        if(quadrado_3.subItens.count > 0) {
+                            item_3.z = 0
+                            subitem_3.z = 1
+                        }
                     }
                     else if(tela_inicial.state === "QUADRADO_3") {
                         tela_inicial.state = "QUADRADO_4"
+                        item_3.z = 1
+                        subitem_3.z = 0
+                        if(quadrado_4.subItens.count > 0) {
+                            item_4.z = 0
+                            subitem_4.z = 1
+                        }
                     }
                     else if(tela_inicial.state === "QUADRADO_4") {
                         tela_inicial.state = "EDIT"
+                        item_4.z = 1
+                        subitem_4.z = 0
                     }
+                }
+            }
+        }
+
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if(tela_inicial.modo_selecao === 1) {
+                    timer.stop()
+                    if(tela_inicial.state === "QUADRADO_1") {
+                        if(quadrado_1.subItens.count > 0) {
+                            tela_inicial.acaoModel = quadrado_1.subItens
+                            if(quadrado_1.subItens.count == 0) {
+                                item_1.z = 1
+                                subitem_1.z = 0
+                            }
+                        }
+                        else {
+                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
+                                                                 name: tela_inicial.acaoModel.get(0).name,
+                                                                 cor: tela_inicial.acaoModel.get(0).cor,
+                                                                 image: tela_inicial.acaoModel.get(0).image
+                                                             })
+                            if(tela_inicial.selecionados.count > 3) {
+                                path.incrementCurrentIndex()
+                            }
+                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                        }
+                    }
+                    else if(tela_inicial.state === "QUADRADO_2") {
+                        if(quadrado_2.subItens.count > 0) {
+                            tela_inicial.acaoModel = quadrado_2.subItens
+                            if(quadrado_2.subItens.count == 0) {
+                                item_2.z = 1
+                                subitem_2.z = 0
+                            }
+                        }
+                        else {
+                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
+                                                                 name: tela_inicial.acaoModel.get(1).name,
+                                                                 cor: tela_inicial.acaoModel.get(1).cor,
+                                                                 image: tela_inicial.acaoModel.get(1).image
+                                                             })
+                            if(tela_inicial.selecionados.count > 3) {
+                                path.incrementCurrentIndex()
+                            }
+                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                        }
+                    }
+                    else if(tela_inicial.state === "QUADRADO_3") {
+                        if(quadrado_3.subItens.count > 0) {
+                            tela_inicial.acaoModel = quadrado_3.subItens
+                            if(quadrado_3.subItens.count == 0) {
+                                item_3.z = 1
+                                subitem_3.z = 0
+                            }
+                        }
+                        else {
+                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
+                                                                 name: tela_inicial.acaoModel.get(2).name,
+                                                                 cor: tela_inicial.acaoModel.get(2).cor,
+                                                                 image: tela_inicial.acaoModel.get(2).image
+                                                             })
+                            if(tela_inicial.selecionados.count > 3) {
+                                path.incrementCurrentIndex()
+                            }
+                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                        }
+                    }
+                    else if(tela_inicial.state === "QUADRADO_4") {
+                        if(quadrado_4.subItens.count > 0) {
+                            tela_inicial.acaoModel = quadrado_4.subItens
+                            if(quadrado_4.subItens.count == 0) {
+                                item_4.z = 1
+                                subitem_4.z = 0
+                            }
+                        }
+                        else {
+                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
+                                                                 name: tela_inicial.acaoModel.get(3).name,
+                                                                 cor: tela_inicial.acaoModel.get(3).cor,
+                                                                 image: tela_inicial.acaoModel.get(3).image
+                                                             })
+                            if(tela_inicial.selecionados.count > 3) {
+                                path.incrementCurrentIndex()
+                            }
+                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                        }
+                    }
+                    timer.start()
                 }
             }
         }
