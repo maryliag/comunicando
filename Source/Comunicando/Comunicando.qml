@@ -411,67 +411,9 @@ Rectangle {
             interval: 2000; running: true; repeat: true
             onTriggered: {
                 if (tela_inicial.modo_selecao == 1){
-                    if(tela_inicial.state === "EDIT") {
-                        tela_inicial.state = "QUADRADO_1"
-                        if(quadrado_1.subItens.count > 0) {
-                            item_1.z = 0
-                            subitem_1.z = 1
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_1") {
-                        tela_inicial.state = "QUADRADO_2"
-                        item_1.z = 1
-                        subitem_1.z = 0
-                        if(quadrado_2.subItens.count > 0) {
-                            item_2.z = 0
-                            subitem_2.z = 1
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_2") {
-                        tela_inicial.state = "QUADRADO_3"
-                        item_2.z = 1
-                        subitem_2.z = 0
-                        if(quadrado_3.subItens.count > 0) {
-                            item_3.z = 0
-                            subitem_3.z = 1
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_3") {
-                        tela_inicial.state = "QUADRADO_4"
-                        item_3.z = 1
-                        subitem_3.z = 0
-                        if(quadrado_4.subItens.count > 0) {
-                            item_4.z = 0
-                            subitem_4.z = 1
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_4") {
-                        tela_inicial.state = "EDIT"
-                        item_4.z = 1
-                        subitem_4.z = 0
-                    }
-                    tela_inicial.numero_itens_varridos = tela_inicial.numero_itens_varridos + 1
-                    if(tela_inicial.numero_itens_varridos === 10) {
-                        tela_inicial.numero_itens_varridos = 0
-                        tela_inicial.acaoModel = tela_inicial.caminhoSeguido.get(tela_inicial.caminhoSeguido.count - 1).itens
-                        tela_inicial.caminhoSeguido.remove(tela_inicial.caminhoSeguido.count - 1)
-                        if(tela_inicial.state === "QUADRADO_1") {
-                            item_1.z = 0
-                            subitem_1.z = 1
-                        }
-                        else if(tela_inicial.state === "QUADRADO_2") {
-                            item_2.z = 0
-                            subitem_2.z = 1
-                        }
-                        else if(tela_inicial.state === "QUADRADO_3") {
-                            item_3.z = 0
-                            subitem_3.z = 1
-                        }
-                        else if(tela_inicial.state === "QUADRADO_4") {
-                            item_4.z = 0
-                            subitem_4.z = 1
-                        }
-                    }
+                    timer.stop()
+                    tela_inicial.varredura()
+                    timer.restart()
                 }
             }
         }
@@ -482,319 +424,211 @@ Rectangle {
             onTriggered: {
                 if (tela_inicial.modo_selecao == 2){
                     timer2.stop()
-                    tela_inicial.numero_itens_varridos = 0
-                    if(tela_inicial.state === "QUADRADO_1") {
-                        if(quadrado_1.subItens.count > 0) {
-                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
-                                                                 name: tela_inicial.acaoModel.get(0).name,
-                                                                 cor: tela_inicial.acaoModel.get(0).cor,
-                                                                 itens: tela_inicial.acaoModel})
-                            if(tela_inicial.caminhoSeguido.count > 3) {
-                                path_arvore.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = quadrado_1.subItens
-                            if(quadrado_1.subItens.count == 0) {
-                                item_1.z = 1
-                                subitem_1.z = 0
-                            }
-                        }
-                        else {
-                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
-                                                                 name: tela_inicial.acaoModel.get(0).name,
-                                                                 cor: tela_inicial.acaoModel.get(0).cor,
-                                                                 image: tela_inicial.acaoModel.get(0).image
-                                                             })
-                            if(tela_inicial.selecionados.count > 3) {
-                                path.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
-                            zeraCaminhoSeguido()
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_2") {
-                        if(quadrado_2.subItens.count > 0) {
-                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
-                                                                 name: tela_inicial.acaoModel.get(1).name,
-                                                                 cor: tela_inicial.acaoModel.get(1).cor,
-                                                                 itens: tela_inicial.acaoModel})
-                            if(tela_inicial.caminhoSeguido.count > 3) {
-                                path_arvore.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = quadrado_2.subItens
-                            if(quadrado_2.subItens.count == 0) {
-                                item_2.z = 1
-                                subitem_2.z = 0
-                            }
-                        }
-                        else {
-                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
-                                                                 name: tela_inicial.acaoModel.get(1).name,
-                                                                 cor: tela_inicial.acaoModel.get(1).cor,
-                                                                 image: tela_inicial.acaoModel.get(1).image
-                                                             })
-                            if(tela_inicial.selecionados.count > 3) {
-                                path.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
-                            zeraCaminhoSeguido()
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_3") {
-                        if(quadrado_3.subItens.count > 0) {
-                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
-                                                                 name: tela_inicial.acaoModel.get(2).name,
-                                                                 cor: tela_inicial.acaoModel.get(2).cor,
-                                                                 itens: tela_inicial.acaoModel})
-                            if(tela_inicial.caminhoSeguido.count > 3) {
-                                path_arvore.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = quadrado_3.subItens
-                            if(quadrado_3.subItens.count == 0) {
-                                item_3.z = 1
-                                subitem_3.z = 0
-                            }
-                        }
-                        else {
-                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
-                                                                 name: tela_inicial.acaoModel.get(2).name,
-                                                                 cor: tela_inicial.acaoModel.get(2).cor,
-                                                                 image: tela_inicial.acaoModel.get(2).image
-                                                             })
-                            if(tela_inicial.selecionados.count > 3) {
-                                path.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
-                            zeraCaminhoSeguido()
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_4") {
-                        if(quadrado_4.subItens.count > 0) {
-                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
-                                                                 name: tela_inicial.acaoModel.get(3).name,
-                                                                 cor: tela_inicial.acaoModel.get(3).cor,
-                                                                 itens: tela_inicial.acaoModel})
-                            if(tela_inicial.caminhoSeguido.count > 3) {
-                                path_arvore.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = quadrado_4.subItens
-                            if(quadrado_4.subItens.count == 0) {
-                                item_4.z = 1
-                                subitem_4.z = 0
-                            }
-                        }
-                        else {
-                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
-                                                                 name: tela_inicial.acaoModel.get(3).name,
-                                                                 cor: tela_inicial.acaoModel.get(3).cor,
-                                                                 image: tela_inicial.acaoModel.get(3).image
-                                                             })
-                            if(tela_inicial.selecionados.count > 3) {
-                                path.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
-                            zeraCaminhoSeguido()
-                        }
-                    }
+                    tela_inicial.seleciona()
                     timer2.restart()
                 }
             }
-            function zeraCaminhoSeguido() {
-                while(tela_inicial.caminhoSeguido.count > 0) {
-                    tela_inicial.caminhoSeguido.remove(0)
-                }
-            }
         }
-
 
         MouseArea {
             anchors.fill: parent
             onClicked: {
                 if(tela_inicial.modo_selecao === 1) {
                     timer.stop()
-                    tela_inicial.numero_itens_varridos = 0
-                    if(tela_inicial.state === "QUADRADO_1") {
-                        if(quadrado_1.subItens.count > 0) {
-                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
-                                                                 name: tela_inicial.acaoModel.get(0).name,
-                                                                 cor: tela_inicial.acaoModel.get(0).cor,
-                                                                 itens: tela_inicial.acaoModel})
-                            if(tela_inicial.caminhoSeguido.count > 3) {
-                                path_arvore.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = quadrado_1.subItens
-                            if(quadrado_1.subItens.count == 0) {
-                                item_1.z = 1
-                                subitem_1.z = 0
-                            }
-                        }
-                        else {
-                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
-                                                                 name: tela_inicial.acaoModel.get(0).name,
-                                                                 cor: tela_inicial.acaoModel.get(0).cor,
-                                                                 image: tela_inicial.acaoModel.get(0).image
-                                                             })
-                            if(tela_inicial.selecionados.count > 3) {
-                                path.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
-                            zeraCaminhoSeguido()
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_2") {
-                        if(quadrado_2.subItens.count > 0) {
-                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
-                                                                 name: tela_inicial.acaoModel.get(1).name,
-                                                                 cor: tela_inicial.acaoModel.get(1).cor,
-                                                                 itens: tela_inicial.acaoModel})
-                            if(tela_inicial.caminhoSeguido.count > 3) {
-                                path_arvore.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = quadrado_2.subItens
-                            if(quadrado_2.subItens.count == 0) {
-                                item_2.z = 1
-                                subitem_2.z = 0
-                            }
-                        }
-                        else {
-                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
-                                                                 name: tela_inicial.acaoModel.get(1).name,
-                                                                 cor: tela_inicial.acaoModel.get(1).cor,
-                                                                 image: tela_inicial.acaoModel.get(1).image
-                                                             })
-                            if(tela_inicial.selecionados.count > 3) {
-                                path.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
-                            zeraCaminhoSeguido()
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_3") {
-                        if(quadrado_3.subItens.count > 0) {
-                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
-                                                                 name: tela_inicial.acaoModel.get(2).name,
-                                                                 cor: tela_inicial.acaoModel.get(2).cor,
-                                                                 itens: tela_inicial.acaoModel})
-                            if(tela_inicial.caminhoSeguido.count > 3) {
-                                path_arvore.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = quadrado_3.subItens
-                            if(quadrado_3.subItens.count == 0) {
-                                item_3.z = 1
-                                subitem_3.z = 0
-                            }
-                        }
-                        else {
-                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
-                                                                 name: tela_inicial.acaoModel.get(2).name,
-                                                                 cor: tela_inicial.acaoModel.get(2).cor,
-                                                                 image: tela_inicial.acaoModel.get(2).image
-                                                             })
-                            if(tela_inicial.selecionados.count > 3) {
-                                path.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
-                            zeraCaminhoSeguido()
-                        }
-                    }
-                    else if(tela_inicial.state === "QUADRADO_4") {
-                        if(quadrado_4.subItens.count > 0) {
-                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
-                                                                 name: tela_inicial.acaoModel.get(3).name,
-                                                                 cor: tela_inicial.acaoModel.get(3).cor,
-                                                                 itens: tela_inicial.acaoModel})
-                            if(tela_inicial.caminhoSeguido.count > 3) {
-                                path_arvore.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = quadrado_4.subItens
-                            if(quadrado_4.subItens.count == 0) {
-                                item_4.z = 1
-                                subitem_4.z = 0
-                            }
-                        }
-                        else {
-                            tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
-                                                                 name: tela_inicial.acaoModel.get(3).name,
-                                                                 cor: tela_inicial.acaoModel.get(3).cor,
-                                                                 image: tela_inicial.acaoModel.get(3).image
-                                                             })
-                            if(tela_inicial.selecionados.count > 3) {
-                                path.incrementCurrentIndex()
-                            }
-                            tela_inicial.acaoModel = tela_inicial.acaoModelBackup
-                            zeraCaminhoSeguido()
-                        }
-                    }
+                    tela_inicial.seleciona()
                     timer.start()
                 }
                 else {
+                    timer2.stop()
+                    tela_inicial.varredura()
                     timer2.restart()
-                    if(tela_inicial.state === "EDIT") {
-                        tela_inicial.state = "QUADRADO_1"
-                        if(quadrado_1.subItens.count > 0) {
-                            item_1.z = 0
-                            subitem_1.z = 1
-                        }
+                }
+            }
+        }
+
+        function varredura() {
+            if(tela_inicial.state === "EDIT") {
+                tela_inicial.state = "QUADRADO_1"
+                if(quadrado_1.subItens.count > 0) {
+                    item_1.z = 0
+                    subitem_1.z = 1
+                }
+            }
+            else if(tela_inicial.state === "QUADRADO_1") {
+                tela_inicial.state = "QUADRADO_2"
+                item_1.z = 1
+                subitem_1.z = 0
+                if(quadrado_2.subItens.count > 0) {
+                    item_2.z = 0
+                    subitem_2.z = 1
+                }
+            }
+            else if(tela_inicial.state === "QUADRADO_2") {
+                tela_inicial.state = "QUADRADO_3"
+                item_2.z = 1
+                subitem_2.z = 0
+                if(quadrado_3.subItens.count > 0) {
+                    item_3.z = 0
+                    subitem_3.z = 1
+                }
+            }
+            else if(tela_inicial.state === "QUADRADO_3") {
+                tela_inicial.state = "QUADRADO_4"
+                item_3.z = 1
+                subitem_3.z = 0
+                if(quadrado_4.subItens.count > 0) {
+                    item_4.z = 0
+                    subitem_4.z = 1
+                }
+            }
+            else if(tela_inicial.state === "QUADRADO_4") {
+                tela_inicial.state = "EDIT"
+                item_4.z = 1
+                subitem_4.z = 0
+            }
+            tela_inicial.numero_itens_varridos = tela_inicial.numero_itens_varridos + 1
+            if(tela_inicial.numero_itens_varridos === 10) {
+                tela_inicial.numero_itens_varridos = 0
+                tela_inicial.acaoModel = tela_inicial.caminhoSeguido.get(tela_inicial.caminhoSeguido.count - 1).itens
+                tela_inicial.caminhoSeguido.remove(tela_inicial.caminhoSeguido.count - 1)
+                if(tela_inicial.state === "QUADRADO_1") {
+                    item_1.z = 0
+                    subitem_1.z = 1
+                }
+                else if(tela_inicial.state === "QUADRADO_2") {
+                    item_2.z = 0
+                    subitem_2.z = 1
+                }
+                else if(tela_inicial.state === "QUADRADO_3") {
+                    item_3.z = 0
+                    subitem_3.z = 1
+                }
+                else if(tela_inicial.state === "QUADRADO_4") {
+                    item_4.z = 0
+                    subitem_4.z = 1
+                }
+            }
+        }
+
+        function seleciona() {
+            tela_inicial.numero_itens_varridos = 0
+            if(tela_inicial.state === "QUADRADO_1") {
+                if(quadrado_1.subItens.count > 0) {
+                    tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                         name: tela_inicial.acaoModel.get(0).name,
+                                                         cor: tela_inicial.acaoModel.get(0).cor,
+                                                         itens: tela_inicial.acaoModel})
+                    if(tela_inicial.caminhoSeguido.count > 3) {
+                        path_arvore.incrementCurrentIndex()
                     }
-                    else if(tela_inicial.state === "QUADRADO_1") {
-                        tela_inicial.state = "QUADRADO_2"
+                    tela_inicial.acaoModel = quadrado_1.subItens
+                    if(quadrado_1.subItens.count == 0) {
                         item_1.z = 1
                         subitem_1.z = 0
-                        if(quadrado_2.subItens.count > 0) {
-                            item_2.z = 0
-                            subitem_2.z = 1
-                        }
                     }
-                    else if(tela_inicial.state === "QUADRADO_2") {
-                        tela_inicial.state = "QUADRADO_3"
+                }
+                else {
+                    tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
+                                                         name: tela_inicial.acaoModel.get(0).name,
+                                                         cor: tela_inicial.acaoModel.get(0).cor,
+                                                         image: tela_inicial.acaoModel.get(0).image
+                                                     })
+                    if(tela_inicial.selecionados.count > 3) {
+                        path.incrementCurrentIndex()
+                    }
+                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                    zeraCaminhoSeguido()
+                }
+            }
+            else if(tela_inicial.state === "QUADRADO_2") {
+                if(quadrado_2.subItens.count > 0) {
+                    tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                         name: tela_inicial.acaoModel.get(1).name,
+                                                         cor: tela_inicial.acaoModel.get(1).cor,
+                                                         itens: tela_inicial.acaoModel})
+                    if(tela_inicial.caminhoSeguido.count > 3) {
+                        path_arvore.incrementCurrentIndex()
+                    }
+                    tela_inicial.acaoModel = quadrado_2.subItens
+                    if(quadrado_2.subItens.count == 0) {
                         item_2.z = 1
                         subitem_2.z = 0
-                        if(quadrado_3.subItens.count > 0) {
-                            item_3.z = 0
-                            subitem_3.z = 1
-                        }
                     }
-                    else if(tela_inicial.state === "QUADRADO_3") {
-                        tela_inicial.state = "QUADRADO_4"
+                }
+                else {
+                    tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
+                                                         name: tela_inicial.acaoModel.get(1).name,
+                                                         cor: tela_inicial.acaoModel.get(1).cor,
+                                                         image: tela_inicial.acaoModel.get(1).image
+                                                     })
+                    if(tela_inicial.selecionados.count > 3) {
+                        path.incrementCurrentIndex()
+                    }
+                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                    zeraCaminhoSeguido()
+                }
+            }
+            else if(tela_inicial.state === "QUADRADO_3") {
+                if(quadrado_3.subItens.count > 0) {
+                    tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                         name: tela_inicial.acaoModel.get(2).name,
+                                                         cor: tela_inicial.acaoModel.get(2).cor,
+                                                         itens: tela_inicial.acaoModel})
+                    if(tela_inicial.caminhoSeguido.count > 3) {
+                        path_arvore.incrementCurrentIndex()
+                    }
+                    tela_inicial.acaoModel = quadrado_3.subItens
+                    if(quadrado_3.subItens.count == 0) {
                         item_3.z = 1
                         subitem_3.z = 0
-                        if(quadrado_4.subItens.count > 0) {
-                            item_4.z = 0
-                            subitem_4.z = 1
-                        }
                     }
-                    else if(tela_inicial.state === "QUADRADO_4") {
-                        tela_inicial.state = "EDIT"
+                }
+                else {
+                    tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
+                                                         name: tela_inicial.acaoModel.get(2).name,
+                                                         cor: tela_inicial.acaoModel.get(2).cor,
+                                                         image: tela_inicial.acaoModel.get(2).image
+                                                     })
+                    if(tela_inicial.selecionados.count > 3) {
+                        path.incrementCurrentIndex()
+                    }
+                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                    zeraCaminhoSeguido()
+                }
+            }
+            else if(tela_inicial.state === "QUADRADO_4") {
+                if(quadrado_4.subItens.count > 0) {
+                    tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                         name: tela_inicial.acaoModel.get(3).name,
+                                                         cor: tela_inicial.acaoModel.get(3).cor,
+                                                         itens: tela_inicial.acaoModel})
+                    if(tela_inicial.caminhoSeguido.count > 3) {
+                        path_arvore.incrementCurrentIndex()
+                    }
+                    tela_inicial.acaoModel = quadrado_4.subItens
+                    if(quadrado_4.subItens.count == 0) {
                         item_4.z = 1
                         subitem_4.z = 0
                     }
-                    tela_inicial.numero_itens_varridos = tela_inicial.numero_itens_varridos + 1
-                    if(tela_inicial.numero_itens_varridos === 10) {
-                        tela_inicial.numero_itens_varridos = 0
-                        tela_inicial.acaoModel = tela_inicial.caminhoSeguido.get(tela_inicial.caminhoSeguido.count - 1).itens
-                        tela_inicial.caminhoSeguido.remove(tela_inicial.caminhoSeguido.count - 1)
-                        if(tela_inicial.state === "QUADRADO_1") {
-                            item_1.z = 0
-                            subitem_1.z = 1
-                        }
-                        else if(tela_inicial.state === "QUADRADO_2") {
-                            item_2.z = 0
-                            subitem_2.z = 1
-                        }
-                        else if(tela_inicial.state === "QUADRADO_3") {
-                            item_3.z = 0
-                            subitem_3.z = 1
-                        }
-                        else if(tela_inicial.state === "QUADRADO_4") {
-                            item_4.z = 0
-                            subitem_4.z = 1
-                        }
+                }
+                else {
+                    tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
+                                                         name: tela_inicial.acaoModel.get(3).name,
+                                                         cor: tela_inicial.acaoModel.get(3).cor,
+                                                         image: tela_inicial.acaoModel.get(3).image
+                                                     })
+                    if(tela_inicial.selecionados.count > 3) {
+                        path.incrementCurrentIndex()
                     }
+                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                    zeraCaminhoSeguido()
                 }
             }
-            function zeraCaminhoSeguido() {
-                while(tela_inicial.caminhoSeguido.count > 0) {
-                    tela_inicial.caminhoSeguido.remove(0)
-                }
+        }
+
+        function zeraCaminhoSeguido() {
+            while(tela_inicial.caminhoSeguido.count > 0) {
+                tela_inicial.caminhoSeguido.remove(0)
             }
         }
 
