@@ -44,6 +44,7 @@ Rectangle {
         property int tamanho_imagem_selecionada: 75
         property int contador_x: 480
         property int contador_y: 170
+        property int numero_itens_varridos: 0
 
         //Definindo as listas de elementos
         property ListModel modelo: ListModel { }
@@ -51,6 +52,7 @@ Rectangle {
         property ListModel acaoModelBackup: AcaoModel{}
         property ListModel confirmacao: ConfirmacaoModel{}
         property ListModel selecionados: ListModel {}
+        property ListModel caminhoSeguido: ListModel {}
 
         Rectangle {
             id: edit
@@ -371,12 +373,37 @@ Rectangle {
             }
         }
         Rectangle {
-            id: caminho
+            id: caminho_arvore
             width: parent.width
             height: parent.height * 0.1
             anchors.top: quadrado_3.bottom
             border.color: "black"
             border.width: 10
+            PathView {
+                id: path_arvore
+                model: tela_inicial.caminhoSeguido
+                pathItemCount: 3
+                path: Path {
+                    startX: caminho_arvore.width * 0.2; startY: caminho_arvore.height / 2
+                    PathLine { x: caminho_arvore.width * 1.1; y: caminho_arvore.height / 2 }
+                }
+                delegate: Component {
+                    Rectangle {
+                        id: quadrado_arvore
+                        width: caminho_arvore.width / 3.5
+                        height: caminho_arvore.height * 0.8
+                        color: cor
+                        border.color: "black"
+                        border.width: 5
+                        Text{
+                            anchors.centerIn: parent
+                            text: name
+                            font.bold: true
+                            scale: 2
+                        }
+                    }
+                }
+            }
         }
 
         Timer {
@@ -423,6 +450,28 @@ Rectangle {
                         item_4.z = 1
                         subitem_4.z = 0
                     }
+                    tela_inicial.numero_itens_varridos = tela_inicial.numero_itens_varridos + 1
+                    if(tela_inicial.numero_itens_varridos === 10) {
+                        tela_inicial.numero_itens_varridos = 0
+                        tela_inicial.acaoModel = tela_inicial.caminhoSeguido.get(tela_inicial.caminhoSeguido.count - 1).itens
+                        tela_inicial.caminhoSeguido.remove(tela_inicial.caminhoSeguido.count - 1)
+                        if(tela_inicial.state === "QUADRADO_1") {
+                            item_1.z = 0
+                            subitem_1.z = 1
+                        }
+                        else if(tela_inicial.state === "QUADRADO_2") {
+                            item_2.z = 0
+                            subitem_2.z = 1
+                        }
+                        else if(tela_inicial.state === "QUADRADO_3") {
+                            item_3.z = 0
+                            subitem_3.z = 1
+                        }
+                        else if(tela_inicial.state === "QUADRADO_4") {
+                            item_4.z = 0
+                            subitem_4.z = 1
+                        }
+                    }
                 }
             }
         }
@@ -432,9 +481,17 @@ Rectangle {
             interval: 2000; running: true; repeat: true
             onTriggered: {
                 if (tela_inicial.modo_selecao == 2){
-                    timer.stop()
+                    timer2.stop()
+                    tela_inicial.numero_itens_varridos = 0
                     if(tela_inicial.state === "QUADRADO_1") {
                         if(quadrado_1.subItens.count > 0) {
+                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                                 name: tela_inicial.acaoModel.get(0).name,
+                                                                 cor: tela_inicial.acaoModel.get(0).cor,
+                                                                 itens: tela_inicial.acaoModel})
+                            if(tela_inicial.caminhoSeguido.count > 3) {
+                                path_arvore.incrementCurrentIndex()
+                            }
                             tela_inicial.acaoModel = quadrado_1.subItens
                             if(quadrado_1.subItens.count == 0) {
                                 item_1.z = 1
@@ -451,10 +508,18 @@ Rectangle {
                                 path.incrementCurrentIndex()
                             }
                             tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                            zeraCaminhoSeguido()
                         }
                     }
                     else if(tela_inicial.state === "QUADRADO_2") {
                         if(quadrado_2.subItens.count > 0) {
+                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                                 name: tela_inicial.acaoModel.get(1).name,
+                                                                 cor: tela_inicial.acaoModel.get(1).cor,
+                                                                 itens: tela_inicial.acaoModel})
+                            if(tela_inicial.caminhoSeguido.count > 3) {
+                                path_arvore.incrementCurrentIndex()
+                            }
                             tela_inicial.acaoModel = quadrado_2.subItens
                             if(quadrado_2.subItens.count == 0) {
                                 item_2.z = 1
@@ -471,10 +536,18 @@ Rectangle {
                                 path.incrementCurrentIndex()
                             }
                             tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                            zeraCaminhoSeguido()
                         }
                     }
                     else if(tela_inicial.state === "QUADRADO_3") {
                         if(quadrado_3.subItens.count > 0) {
+                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                                 name: tela_inicial.acaoModel.get(2).name,
+                                                                 cor: tela_inicial.acaoModel.get(2).cor,
+                                                                 itens: tela_inicial.acaoModel})
+                            if(tela_inicial.caminhoSeguido.count > 3) {
+                                path_arvore.incrementCurrentIndex()
+                            }
                             tela_inicial.acaoModel = quadrado_3.subItens
                             if(quadrado_3.subItens.count == 0) {
                                 item_3.z = 1
@@ -491,10 +564,18 @@ Rectangle {
                                 path.incrementCurrentIndex()
                             }
                             tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                            zeraCaminhoSeguido()
                         }
                     }
                     else if(tela_inicial.state === "QUADRADO_4") {
                         if(quadrado_4.subItens.count > 0) {
+                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                                 name: tela_inicial.acaoModel.get(3).name,
+                                                                 cor: tela_inicial.acaoModel.get(3).cor,
+                                                                 itens: tela_inicial.acaoModel})
+                            if(tela_inicial.caminhoSeguido.count > 3) {
+                                path_arvore.incrementCurrentIndex()
+                            }
                             tela_inicial.acaoModel = quadrado_4.subItens
                             if(quadrado_4.subItens.count == 0) {
                                 item_4.z = 1
@@ -511,9 +592,15 @@ Rectangle {
                                 path.incrementCurrentIndex()
                             }
                             tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                            zeraCaminhoSeguido()
                         }
                     }
-                    timer.start()
+                    timer2.restart()
+                }
+            }
+            function zeraCaminhoSeguido() {
+                while(tela_inicial.caminhoSeguido.count > 0) {
+                    tela_inicial.caminhoSeguido.remove(0)
                 }
             }
         }
@@ -524,8 +611,16 @@ Rectangle {
             onClicked: {
                 if(tela_inicial.modo_selecao === 1) {
                     timer.stop()
+                    tela_inicial.numero_itens_varridos = 0
                     if(tela_inicial.state === "QUADRADO_1") {
                         if(quadrado_1.subItens.count > 0) {
+                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                                 name: tela_inicial.acaoModel.get(0).name,
+                                                                 cor: tela_inicial.acaoModel.get(0).cor,
+                                                                 itens: tela_inicial.acaoModel})
+                            if(tela_inicial.caminhoSeguido.count > 3) {
+                                path_arvore.incrementCurrentIndex()
+                            }
                             tela_inicial.acaoModel = quadrado_1.subItens
                             if(quadrado_1.subItens.count == 0) {
                                 item_1.z = 1
@@ -542,10 +637,18 @@ Rectangle {
                                 path.incrementCurrentIndex()
                             }
                             tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                            zeraCaminhoSeguido()
                         }
                     }
                     else if(tela_inicial.state === "QUADRADO_2") {
                         if(quadrado_2.subItens.count > 0) {
+                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                                 name: tela_inicial.acaoModel.get(1).name,
+                                                                 cor: tela_inicial.acaoModel.get(1).cor,
+                                                                 itens: tela_inicial.acaoModel})
+                            if(tela_inicial.caminhoSeguido.count > 3) {
+                                path_arvore.incrementCurrentIndex()
+                            }
                             tela_inicial.acaoModel = quadrado_2.subItens
                             if(quadrado_2.subItens.count == 0) {
                                 item_2.z = 1
@@ -562,10 +665,18 @@ Rectangle {
                                 path.incrementCurrentIndex()
                             }
                             tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                            zeraCaminhoSeguido()
                         }
                     }
                     else if(tela_inicial.state === "QUADRADO_3") {
                         if(quadrado_3.subItens.count > 0) {
+                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                                 name: tela_inicial.acaoModel.get(2).name,
+                                                                 cor: tela_inicial.acaoModel.get(2).cor,
+                                                                 itens: tela_inicial.acaoModel})
+                            if(tela_inicial.caminhoSeguido.count > 3) {
+                                path_arvore.incrementCurrentIndex()
+                            }
                             tela_inicial.acaoModel = quadrado_3.subItens
                             if(quadrado_3.subItens.count == 0) {
                                 item_3.z = 1
@@ -582,10 +693,18 @@ Rectangle {
                                 path.incrementCurrentIndex()
                             }
                             tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                            zeraCaminhoSeguido()
                         }
                     }
                     else if(tela_inicial.state === "QUADRADO_4") {
                         if(quadrado_4.subItens.count > 0) {
+                            tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
+                                                                 name: tela_inicial.acaoModel.get(3).name,
+                                                                 cor: tela_inicial.acaoModel.get(3).cor,
+                                                                 itens: tela_inicial.acaoModel})
+                            if(tela_inicial.caminhoSeguido.count > 3) {
+                                path_arvore.incrementCurrentIndex()
+                            }
                             tela_inicial.acaoModel = quadrado_4.subItens
                             if(quadrado_4.subItens.count == 0) {
                                 item_4.z = 1
@@ -602,56 +721,83 @@ Rectangle {
                                 path.incrementCurrentIndex()
                             }
                             tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                            zeraCaminhoSeguido()
                         }
                     }
                     timer.start()
                 }
                 else {
                     timer2.restart()
-                    if (tela_inicial.modo_selecao == 2){
-                        if(tela_inicial.state === "EDIT") {
-                            tela_inicial.state = "QUADRADO_1"
-                            if(quadrado_1.subItens.count > 0) {
-                                item_1.z = 0
-                                subitem_1.z = 1
-                            }
+                    if(tela_inicial.state === "EDIT") {
+                        tela_inicial.state = "QUADRADO_1"
+                        if(quadrado_1.subItens.count > 0) {
+                            item_1.z = 0
+                            subitem_1.z = 1
                         }
-                        else if(tela_inicial.state === "QUADRADO_1") {
-                            tela_inicial.state = "QUADRADO_2"
-                            item_1.z = 1
-                            subitem_1.z = 0
-                            if(quadrado_2.subItens.count > 0) {
-                                item_2.z = 0
-                                subitem_2.z = 1
-                            }
+                    }
+                    else if(tela_inicial.state === "QUADRADO_1") {
+                        tela_inicial.state = "QUADRADO_2"
+                        item_1.z = 1
+                        subitem_1.z = 0
+                        if(quadrado_2.subItens.count > 0) {
+                            item_2.z = 0
+                            subitem_2.z = 1
+                        }
+                    }
+                    else if(tela_inicial.state === "QUADRADO_2") {
+                        tela_inicial.state = "QUADRADO_3"
+                        item_2.z = 1
+                        subitem_2.z = 0
+                        if(quadrado_3.subItens.count > 0) {
+                            item_3.z = 0
+                            subitem_3.z = 1
+                        }
+                    }
+                    else if(tela_inicial.state === "QUADRADO_3") {
+                        tela_inicial.state = "QUADRADO_4"
+                        item_3.z = 1
+                        subitem_3.z = 0
+                        if(quadrado_4.subItens.count > 0) {
+                            item_4.z = 0
+                            subitem_4.z = 1
+                        }
+                    }
+                    else if(tela_inicial.state === "QUADRADO_4") {
+                        tela_inicial.state = "EDIT"
+                        item_4.z = 1
+                        subitem_4.z = 0
+                    }
+                    tela_inicial.numero_itens_varridos = tela_inicial.numero_itens_varridos + 1
+                    if(tela_inicial.numero_itens_varridos === 10) {
+                        tela_inicial.numero_itens_varridos = 0
+                        tela_inicial.acaoModel = tela_inicial.caminhoSeguido.get(tela_inicial.caminhoSeguido.count - 1).itens
+                        tela_inicial.caminhoSeguido.remove(tela_inicial.caminhoSeguido.count - 1)
+                        if(tela_inicial.state === "QUADRADO_1") {
+                            item_1.z = 0
+                            subitem_1.z = 1
                         }
                         else if(tela_inicial.state === "QUADRADO_2") {
-                            tela_inicial.state = "QUADRADO_3"
-                            item_2.z = 1
-                            subitem_2.z = 0
-                            if(quadrado_3.subItens.count > 0) {
-                                item_3.z = 0
-                                subitem_3.z = 1
-                            }
+                            item_2.z = 0
+                            subitem_2.z = 1
                         }
                         else if(tela_inicial.state === "QUADRADO_3") {
-                            tela_inicial.state = "QUADRADO_4"
-                            item_3.z = 1
-                            subitem_3.z = 0
-                            if(quadrado_4.subItens.count > 0) {
-                                item_4.z = 0
-                                subitem_4.z = 1
-                            }
+                            item_3.z = 0
+                            subitem_3.z = 1
                         }
                         else if(tela_inicial.state === "QUADRADO_4") {
-                            tela_inicial.state = "EDIT"
-                            item_4.z = 1
-                            subitem_4.z = 0
+                            item_4.z = 0
+                            subitem_4.z = 1
                         }
                     }
                 }
             }
+            function zeraCaminhoSeguido() {
+                while(tela_inicial.caminhoSeguido.count > 0) {
+                    tela_inicial.caminhoSeguido.remove(0)
+                }
+            }
         }
+
 
         states: [
             State {
