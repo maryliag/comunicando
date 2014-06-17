@@ -512,8 +512,15 @@ Rectangle {
 
         function seleciona() {
             tela_inicial.numero_itens_varridos = 0
-            if(tela_inicial.state === "QUADRADO_1") {
-                if(quadrado_1.subItens.count > 0) {
+            if(tela_inicial.state === "EDIT") {
+                tela_inicial.acaoModel = tela_inicial.confirmacao
+            }
+            else if(tela_inicial.state === "QUADRADO_1") {
+                if(tela_inicial.acaoModel.get(0).type === "edit") {
+                    tela_inicial.zeraSelecionados()
+                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                }
+                else if(quadrado_1.subItens.count > 0) {
                     tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
                                                          name: tela_inicial.acaoModel.get(0).name,
                                                          cor: tela_inicial.acaoModel.get(0).cor,
@@ -541,7 +548,11 @@ Rectangle {
                 }
             }
             else if(tela_inicial.state === "QUADRADO_2") {
-                if(quadrado_2.subItens.count > 0) {
+                if(tela_inicial.acaoModel.get(1).type === "edit") {
+                    tela_inicial.selecionados.remove(tela_inicial.selecionados.count - 1);
+                    path.decrementCurrentIndex();
+                }
+                else if(quadrado_2.subItens.count > 0) {
                     tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
                                                          name: tela_inicial.acaoModel.get(1).name,
                                                          cor: tela_inicial.acaoModel.get(1).cor,
@@ -569,7 +580,11 @@ Rectangle {
                 }
             }
             else if(tela_inicial.state === "QUADRADO_3") {
-                if(quadrado_3.subItens.count > 0) {
+                if(tela_inicial.acaoModel.get(2).type === "edit") {
+                    tela_inicial.zeraSelecionados()
+                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                }
+                else if(quadrado_3.subItens.count > 0) {
                     tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
                                                          name: tela_inicial.acaoModel.get(2).name,
                                                          cor: tela_inicial.acaoModel.get(2).cor,
@@ -597,7 +612,11 @@ Rectangle {
                 }
             }
             else if(tela_inicial.state === "QUADRADO_4") {
-                if(quadrado_4.subItens.count > 0) {
+                if(tela_inicial.acaoModel.get(0).type === "edit") {
+                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                    tela_inicial.state = "EDIT"
+                }
+                else if(quadrado_4.subItens.count > 0) {
                     tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
                                                          name: tela_inicial.acaoModel.get(3).name,
                                                          cor: tela_inicial.acaoModel.get(3).cor,
@@ -623,6 +642,12 @@ Rectangle {
                     tela_inicial.acaoModel = tela_inicial.acaoModelBackup
                     zeraCaminhoSeguido()
                 }
+            }
+        }
+
+        function zeraSelecionados() {
+            while(tela_inicial.selecionados.count > 0) {
+                tela_inicial.selecionados.remove(0)
             }
         }
 
