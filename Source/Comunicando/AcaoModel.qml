@@ -9,127 +9,231 @@ import QtQuick 2.2
 
 //Lista de elementos possiveis para ações/falas dos usuários
 ListModel {
-    //Lista de Necessidades
     ListElement {
-        name: "Necessidade"
-        cor: "orange"
+        name: "Casa"
+        cor: "white"
         type: "menu"
-        image: "resources/necessidade.png"
+        image: "resources/new/casa.png"
         subItems: [
             ListElement {
-                name: "Bebida"
-                cor: "orange"
+                name: "Meu quarto"
+                cor: "white"
                 type: "submenu"
-                image: "resources/bebida.png"
+                image: "resources/new/quarto_crianca.png"
                 subItems: []
             },
 
             ListElement {
-                name: "Comida"
-                cor: "orange"
+                name: "Quarto pais"
+                cor: "white"
                 type: "submenu"
-                image: "resources/comida.png"
+                image: "resources/new/quarto_pais.png"
                 subItems: []
             },
 
             ListElement {
-                name: "Banheiro"
-                cor: "orange"
+                name: "Quintal"
+                cor: "white"
                 type: "submenu"
-                image: "resources/banheiro.png"
+                image: "resources/new/quintal.png"
                 subItems:[]
             },
             ListElement {
-                name: ""
+                name: "Cozinha"
                 cor: "white"
                 type: "submenu"
-                image: ""
-                subItems: []
-            }
-        ]
-    }
-    //Lista de pessoas
-    ListElement {
-        name: "Pessoa"
-        cor: "yellow"
-        type: "menu"
-        image: "resources/pessoa.png"
-        subItems: [
-            ListElement {
-                name: "Mãe"
-                cor: "yellow"
-                type: "submenu"
-                image: "resources/mae.png"
-                subItems: []
-            },
-            ListElement {
-                name: "Pai"
-                cor: "yellow"
-                type: "submenu"
-                image: "resources/pai.png"
-                subItems: []
-            },
-            ListElement {
-                name: "Cuidadora"
-                cor: "yellow"
-                type: "submenu"
-                image: "resources/cuidadora.png"
-                subItems: []
-            },
-            ListElement {
-                name: ""
-                cor: "white"
-                type: "submenu"
-                image: ""
+                image: "resources/new/cozinha.png"
                 subItems: []
             }
         ]
     }
 
-    //Realizar alguma atividade
     ListElement {
-        name: "Atividade"
-        cor: "green"
+        name: "Escola"
+        cor: "white"
         type: "menu"
-        image: "resources/atividade.png"
+        image: "resources/new/escola.png"
         subItems: [
             ListElement {
-                name: "Assistir TV"
-                cor: "green"
-                type: "submenu"
-                image: "resources/tv.png"
-                subItems: []
-            },
-            ListElement {
-                name: "Escutar uma História"
-                cor: "green"
-                type: "submenu"
-                image: "resources/historia.png"
-                subItems: []
-            },
-            ListElement {
-                name: "Jogar"
-                cor: "green"
-                type: "submenu"
-                image: "resources/jogar.png"
-                subItems: []
-            },
-            ListElement {
-                name: ""
+                name: "Sala de aula"
                 cor: "white"
                 type: "submenu"
-                image: ""
+                image: "resources/new/sala_aula.png"
+                subItems: []
+            },
+
+            ListElement {
+                name: "Elevador"
+                cor: "white"
+                type: "submenu"
+                image: "resources/new/elevador.png"
+                subItems: []
+            },
+
+            ListElement {
+                name: "Brinquedoteca"
+                cor: "white"
+                type: "submenu"
+                image: "resources/new/brinquedoteca.png"
+                subItems:[]
+            },
+            ListElement {
+                name: "Refeitório"
+                cor: "white"
+                type: "submenu"
+                image: "resources/new/refeitorio.png"
                 subItems: []
             }
         ]
     }
 
-    //Lista de como o usuário está se sentindo
+    ListElement {
+        name: "Passear"
+        cor: "white"
+        type: "menu"
+        image: "resources/new/passear.png"
+        subItems: [
+            ListElement {
+                name: "Cinema"
+                cor: "white"
+                type: "submenu"
+                image: "resources/new/cinema.png"
+                subItems: []
+            },
+
+            ListElement {
+                name: "Praia"
+                cor: "white"
+                type: "submenu"
+                image: "resources/new/praia.png"
+                subItems: []
+            },
+
+            ListElement {
+                name: "Parque"
+                cor: "white"
+                type: "submenu"
+                image: "resources/new/parque.png"
+                subItems:[]
+            },
+            ListElement {
+                name: "Sorveteria"
+                cor: "white"
+                type: "submenu"
+                image: "resources/new/sorveteria.png"
+                subItems: []
+            }
+        ]
+    }
+
+    ListElement {
+        name: "Comida"
+        cor: "orange"
+        type: "menu"
+        image: "resources/new/comer.png"
+        subItems: [
+            ListElement {
+                name: "Sorvete"
+                cor: "orange"
+                type: "submenu"
+                image: "resources/new/sorvete.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Café"
+                cor: "orange"
+                type: "submenu"
+                image: "resources/new/cafe.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Chocolate"
+                cor: "orange"
+                type: "submenu"
+                image: "resources/new/chocolate.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Pirulito"
+                cor: "orange"
+                type: "submenu"
+                image: "resources/new/pirulito.png"
+                subItems: []
+            }
+        ]
+    }
+
+    ListElement {
+        name: "Brinquedo"
+        cor: "orange"
+        type: "menu"
+        image: "resources/new/brinquedos.png"
+        subItems: [
+            ListElement {
+                name: "Angry Birds"
+                cor: "orange"
+                type: "submenu"
+                image: "resources/new/angry_birds.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Helicoptero"
+                cor: "orange"
+                type: "submenu"
+                image: "resources/new/helicoptero.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Bola"
+                cor: "orange"
+                type: "submenu"
+                image: "resources/new/bola.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Tinta"
+                cor: "orange"
+                type: "submenu"
+                image: "resources/new/tinta.png"
+                subItems: []
+            }
+        ]
+    }
+
     ListElement {
         name: "Sentimento"
         cor: "blue"
         type: "menu"
-        image: "resources/sentimento.png"
-        subItems: []
+        image: "resources/atividade.png"
+        subItems: [
+            ListElement {
+                name: "Feliz"
+                cor: "blue"
+                type: "submenu"
+                image: "resources/new.feliz.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Triste"
+                cor: "blue"
+                type: "submenu"
+                image: "resources/new/triste.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Bravo"
+                cor: "blue"
+                type: "submenu"
+                image: "resources/new/bravo.png"
+                subItems: []
+            },
+            ListElement {
+                name: "Medo"
+                cor: "blue"
+                type: "submenu"
+                image: "resources/new/medo.png"
+                subItems: []
+            }
+        ]
     }
 }
