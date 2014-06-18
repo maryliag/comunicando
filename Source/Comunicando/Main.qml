@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.0
 ApplicationWindow {
     id: main_window
     title: "Comunicando"
-    height: Screen.desktopAvailableHeight
+    height: Screen.desktopAvailableHeight - 30
     width: (Screen.desktopAvailableHeight * 4) / 5
     menuBar: MenuBar {
         Menu {

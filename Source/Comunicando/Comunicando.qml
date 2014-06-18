@@ -2,6 +2,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.0
+import QtMultimedia 5.0
 
 Rectangle {
     //Descrição da tela principal
@@ -22,8 +23,7 @@ Rectangle {
             Label { text: "||" }
             Label {
                 text: {
-                    var timerAtual = tela_inicial.modo_selecao == 1 ? timer : timer2;
-                    return "Tempo: " + timerAtual.interval / 1000 + "s"
+                    return "Tempo: " + timer.interval / 1000 + "s"
                 }
             }
         }
@@ -53,6 +53,24 @@ Rectangle {
         property ListModel confirmacao: ConfirmacaoModel{}
         property ListModel selecionados: ListModel {}
         property ListModel caminhoSeguido: ListModel {}
+
+        Rectangle {
+            id: barra
+            z: 1
+            width: parent.width
+            height: parent.height * 0.02
+            border.color: "red"
+            border.width: 5
+            ProgressBar {
+                id: barra_timer
+                width: parent.width * 0.98
+                height: parent.height * 0.98
+                anchors.centerIn: parent
+                maximumValue: 10
+                minimumValue: 0
+            }
+        }
+
 
         Rectangle {
             id: edit
@@ -410,43 +428,44 @@ Rectangle {
             id: timer
             interval: 2000; running: true; repeat: true
             onTriggered: {
-                if (tela_inicial.modo_selecao == 1){
-                    timer.stop()
+                if(tela_inicial.modo_selecao === 1) {
                     tela_inicial.varredura()
-                    timer.restart()
+                }
+                else {
+                    tela_inicial.seleciona()
                 }
             }
         }
 
-        Timer{
-            id: timer2
-            interval: 2000; running: true; repeat: true
+        Timer {
+            id: timer_barra
+            interval: 200; running: true; repeat: true
             onTriggered: {
-                if (tela_inicial.modo_selecao == 2){
-                    timer2.stop()
-                    tela_inicial.seleciona()
-                    timer2.restart()
+                barra_timer.value = barra_timer.value + 1
+                if(barra_timer.value == 10) {
+                    barra_timer.value = 0
                 }
             }
         }
 
         MouseArea {
+            id: mouse
+            z: 3
             anchors.fill: parent
             onClicked: {
                 if(tela_inicial.modo_selecao === 1) {
-                    timer.stop()
                     tela_inicial.seleciona()
-                    timer.start()
                 }
                 else {
-                    timer2.stop()
                     tela_inicial.varredura()
-                    timer2.restart()
                 }
             }
         }
 
         function varredura() {
+            timer.restart()
+            barra_timer.value = 0
+            timer_barra.restart()
             if(tela_inicial.state === "EDIT") {
                 tela_inicial.state = "QUADRADO_1"
                 if(quadrado_1.subItens.count > 0) {
@@ -473,12 +492,16 @@ Rectangle {
                 }
             }
             else if(tela_inicial.state === "QUADRADO_3") {
-                tela_inicial.state = "QUADRADO_4"
                 item_3.z = 1
                 subitem_3.z = 0
-                if(quadrado_4.subItens.count > 0) {
-                    item_4.z = 0
-                    subitem_4.z = 1
+                if(tela_inicial.acaoModel.get(3).type == "nada") {
+                    tela_inicial.state = "EDIT"
+                } else {
+                    tela_inicial.state = "QUADRADO_4"
+                    if(quadrado_4.subItens.count > 0) {
+                        item_4.z = 0
+                        subitem_4.z = 1
+                    }
                 }
             }
             else if(tela_inicial.state === "QUADRADO_4") {
@@ -487,38 +510,52 @@ Rectangle {
                 subitem_4.z = 0
             }
             tela_inicial.numero_itens_varridos = tela_inicial.numero_itens_varridos + 1
-            if(tela_inicial.numero_itens_varridos === 10) {
+            var varreuDuasVezes = (tela_inicial.acaoModel.get(3).type !== "nada") ?
+                        (tela_inicial.numero_itens_varridos === 10) :
+                        (tela_inicial.numero_itens_varridos === 8)
+            if(varreuDuasVezes) {
                 tela_inicial.numero_itens_varridos = 0
-                tela_inicial.acaoModel = tela_inicial.caminhoSeguido.get(tela_inicial.caminhoSeguido.count - 1).itens
-                tela_inicial.caminhoSeguido.remove(tela_inicial.caminhoSeguido.count - 1)
-                if(tela_inicial.state === "QUADRADO_1") {
-                    item_1.z = 0
-                    subitem_1.z = 1
-                }
-                else if(tela_inicial.state === "QUADRADO_2") {
-                    item_2.z = 0
-                    subitem_2.z = 1
-                }
-                else if(tela_inicial.state === "QUADRADO_3") {
-                    item_3.z = 0
-                    subitem_3.z = 1
-                }
-                else if(tela_inicial.state === "QUADRADO_4") {
-                    item_4.z = 0
-                    subitem_4.z = 1
+                if(tela_inicial.caminhoSeguido.count > 0) {
+                    tela_inicial.acaoModel = tela_inicial.caminhoSeguido.get(tela_inicial.caminhoSeguido.count - 1).itens
+                    tela_inicial.caminhoSeguido.remove(tela_inicial.caminhoSeguido.count - 1)
+                    if(tela_inicial.state === "QUADRADO_1") {
+                        item_1.z = 0
+                        subitem_1.z = 1
+                    }
+                    else if(tela_inicial.state === "QUADRADO_2") {
+                        item_2.z = 0
+                        subitem_2.z = 1
+                    }
+                    else if(tela_inicial.state === "QUADRADO_3") {
+                        item_3.z = 0
+                        subitem_3.z = 1
+                    }
+                    else if(tela_inicial.state === "QUADRADO_4") {
+                        item_4.z = 0
+                        subitem_4.z = 1
+                    }
                 }
             }
         }
 
         function seleciona() {
+            timer.restart()
+            barra_timer.value = 0
+            timer_barra.restart()
             tela_inicial.numero_itens_varridos = 0
             if(tela_inicial.state === "EDIT") {
                 tela_inicial.acaoModel = tela_inicial.confirmacao
+                zeraCaminhoSeguido()
             }
             else if(tela_inicial.state === "QUADRADO_1") {
                 if(tela_inicial.acaoModel.get(0).type === "edit") {
-                    tela_inicial.zeraSelecionados()
-                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                    if(tela_inicial.selecionados.count > 0) {
+                        mouse.enabled = false
+                        timer.stop()
+                        timer_barra.stop()
+                        som.source = tela_inicial.selecionados.get(0).sound
+                        tocar()
+                    }
                 }
                 else if(quadrado_1.subItens.count > 0) {
                     tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
@@ -533,24 +570,31 @@ Rectangle {
                         item_1.z = 1
                         subitem_1.z = 0
                     }
+                    tela_inicial.state = "EDIT"
                 }
                 else {
                     tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
                                                          name: tela_inicial.acaoModel.get(0).name,
                                                          cor: tela_inicial.acaoModel.get(0).cor,
-                                                         image: tela_inicial.acaoModel.get(0).image
+                                                         image: tela_inicial.acaoModel.get(0).image,
+                                                         sound: tela_inicial.acaoModel.get(0).sound
                                                      })
                     if(tela_inicial.selecionados.count > 3) {
                         path.incrementCurrentIndex()
                     }
                     tela_inicial.acaoModel = tela_inicial.acaoModelBackup
                     zeraCaminhoSeguido()
+                    tela_inicial.state = "EDIT"
                 }
             }
             else if(tela_inicial.state === "QUADRADO_2") {
                 if(tela_inicial.acaoModel.get(1).type === "edit") {
                     tela_inicial.selecionados.remove(tela_inicial.selecionados.count - 1);
                     path.decrementCurrentIndex();
+                    if(tela_inicial.selecionados.count == 0) {
+                        tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                        tela_inicial.state = "EDIT"
+                    }
                 }
                 else if(quadrado_2.subItens.count > 0) {
                     tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
@@ -565,24 +609,28 @@ Rectangle {
                         item_2.z = 1
                         subitem_2.z = 0
                     }
+                    tela_inicial.state = "EDIT"
                 }
                 else {
                     tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
                                                          name: tela_inicial.acaoModel.get(1).name,
                                                          cor: tela_inicial.acaoModel.get(1).cor,
-                                                         image: tela_inicial.acaoModel.get(1).image
+                                                         image: tela_inicial.acaoModel.get(1).image,
+                                                         sound: tela_inicial.acaoModel.get(1).sound
                                                      })
                     if(tela_inicial.selecionados.count > 3) {
                         path.incrementCurrentIndex()
                     }
                     tela_inicial.acaoModel = tela_inicial.acaoModelBackup
                     zeraCaminhoSeguido()
+                    tela_inicial.state = "EDIT"
                 }
             }
             else if(tela_inicial.state === "QUADRADO_3") {
                 if(tela_inicial.acaoModel.get(2).type === "edit") {
                     tela_inicial.zeraSelecionados()
                     tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                    tela_inicial.state = "EDIT"
                 }
                 else if(quadrado_3.subItens.count > 0) {
                     tela_inicial.caminhoSeguido.insert(tela_inicial.caminhoSeguido.count, {
@@ -597,18 +645,22 @@ Rectangle {
                         item_3.z = 1
                         subitem_3.z = 0
                     }
+                    tela_inicial.state = "EDIT"
                 }
                 else {
                     tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
                                                          name: tela_inicial.acaoModel.get(2).name,
                                                          cor: tela_inicial.acaoModel.get(2).cor,
-                                                         image: tela_inicial.acaoModel.get(2).image
+                                                         image: tela_inicial.acaoModel.get(2).image,
+                                                         sound: tela_inicial.acaoModel.get(2).sound
+
                                                      })
                     if(tela_inicial.selecionados.count > 3) {
                         path.incrementCurrentIndex()
                     }
                     tela_inicial.acaoModel = tela_inicial.acaoModelBackup
                     zeraCaminhoSeguido()
+                    tela_inicial.state = "EDIT"
                 }
             }
             else if(tela_inicial.state === "QUADRADO_4") {
@@ -629,18 +681,22 @@ Rectangle {
                         item_4.z = 1
                         subitem_4.z = 0
                     }
+                    tela_inicial.state = "EDIT"
                 }
                 else {
                     tela_inicial.selecionados.insert(tela_inicial.selecionados.count, {
                                                          name: tela_inicial.acaoModel.get(3).name,
                                                          cor: tela_inicial.acaoModel.get(3).cor,
-                                                         image: tela_inicial.acaoModel.get(3).image
+                                                         image: tela_inicial.acaoModel.get(3).image,
+                                                         sound: tela_inicial.acaoModel.get(3).sound
+
                                                      })
                     if(tela_inicial.selecionados.count > 3) {
                         path.incrementCurrentIndex()
                     }
                     tela_inicial.acaoModel = tela_inicial.acaoModelBackup
                     zeraCaminhoSeguido()
+                    tela_inicial.state = "EDIT"
                 }
             }
         }
@@ -657,6 +713,30 @@ Rectangle {
             }
         }
 
+        MediaPlayer {
+            id: som
+            property int i: 1
+            onStopped: {
+                if(som.i < tela_inicial.selecionados.count) {
+                    som.source = tela_inicial.selecionados.get(i).sound
+                    som.i = som.i + 1
+                    som.play()
+                } else {
+                    timer.start()
+                    barra_timer.value = 0
+                    timer_barra.restart()
+                    mouse.enabled = true
+                    som.i = 1
+                    tela_inicial.zeraSelecionados()
+                    tela_inicial.acaoModel = tela_inicial.acaoModelBackup
+                    tela_inicial.state = "EDIT"
+                }
+            }
+        }
+
+        function tocar() {
+            som.play()
+        }
 
         states: [
             State {
@@ -681,6 +761,12 @@ Rectangle {
                     target: item_4
                     border.color: "black"
                 }
+                PropertyChanges {
+                    target: barra
+                    x: 0
+                    y: 0
+                    width: tela_inicial.width
+                }
             },
             State {
                 name: "QUADRADO_1"
@@ -703,6 +789,12 @@ Rectangle {
                 PropertyChanges {
                     target: item_4
                     border.color: "black"
+                }
+                PropertyChanges {
+                    target: barra
+                    x: 0
+                    y: tela_inicial.height * 0.3
+                    width: tela_inicial.width / 2
                 }
             },
             State {
@@ -727,6 +819,12 @@ Rectangle {
                     target: item_4
                     border.color: "black"
                 }
+                PropertyChanges {
+                    target: barra
+                    x: tela_inicial.width / 2
+                    y: tela_inicial.height * 0.3
+                    width: tela_inicial.width / 2
+                }
             },
             State {
                 name: "QUADRADO_3"
@@ -750,6 +848,12 @@ Rectangle {
                     target: item_4
                     border.color: "black"
                 }
+                PropertyChanges {
+                    target: barra
+                    x: 0
+                    y: tela_inicial.height * 0.6
+                    width: tela_inicial.width / 2
+                }
             },
             State {
                 name: "QUADRADO_4"
@@ -772,6 +876,12 @@ Rectangle {
                 PropertyChanges {
                     target: item_4
                     border.color: "red"
+                }
+                PropertyChanges {
+                    target: barra
+                    x: tela_inicial.width / 2
+                    y: tela_inicial.height * 0.6
+                    width: tela_inicial.width / 2
                 }
             }
         ]
@@ -806,32 +916,32 @@ Rectangle {
             if (event.key === Qt.Key_1) {
                 tela_inicial.modo_selecao = 1
                 modo_selecao.text = "Modo de seleção: varredura"
-                timer.start()
-                timer2.stop()
+                timer.restart()
+                barra_timer.value = 0
+                timer_barra.restart()
             }
             else if(event.key === Qt.Key_2) {
                 tela_inicial.modo_selecao = 2
                 modo_selecao.text = "Modo de seleção: contagem regressiva"
-                timer2.start()
-                timer.stop()
+                timer.restart()
+                barra_timer.value = 0
+                timer_barra.restart()
             }
             //Aumentar ou diminuir o tempo de varredura
             else if(event.key === Qt.Key_Left) {
-                if(tela_inicial.modo_selecao == 1) {
-                    timer.interval = timer.interval - 500
-                } else {
-                    timer2.interval = timer2.interval - 500
-                    timer2.restart()
-                }
+                timer.interval = timer.interval - 500
+                timer_barra.interval = timer_barra.interval - 50
+                timer.restart()
+                barra_timer.value = 0
+                timer_barra.restart()
             }
 
             else if(event.key === Qt.Key_Right) {
-                if(tela_inicial.modo_selecao == 1) {
-                    timer.interval = timer.interval + 500
-                } else {
-                    timer2.interval = timer2.interval + 500
-                    timer2.restart()
-                }
+                timer.interval = timer.interval + 500
+                timer_barra.interval = timer_barra.interval + 50
+                timer.restart()
+                barra_timer.value = 0
+                timer_barra.restart()
             }
             //Aumentar ou diminuir a imagem
             else if(event.key === Qt.Key_G) {
