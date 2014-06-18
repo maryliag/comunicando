@@ -550,6 +550,8 @@ Rectangle {
             else if(tela_inicial.state === "QUADRADO_1") {
                 if(tela_inicial.acaoModel.get(0).type === "edit") {
                     if(tela_inicial.selecionados.count > 0) {
+                        path.positionViewAtIndex(0, PathView.Beginning)
+
                         mouse.enabled = false
                         timer.stop()
                         timer_barra.stop()
@@ -723,6 +725,7 @@ Rectangle {
                     som.source = tela_inicial.selecionados.get(i).sound
                     som.i = som.i + 1
                     som.play()
+                    path.incrementCurrentIndex()
                 } else {
                     timer.start()
                     barra_timer.value = 0

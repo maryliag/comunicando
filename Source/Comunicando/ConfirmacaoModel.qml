@@ -2,24 +2,27 @@ import QtQuick 2.2
 
 ListModel {
     ListElement {
-        name: "Ok"
+        name: "Escutar"
         cor: "white"
         type: "edit"
-        image: "resources/ok.jpg"
+        image: "resources/escutar.png"
+        sound: ""
         subItems: []
     }
     ListElement {
         name: "Apagar"
         cor: "white"
         type: "edit"
-        image: "resources/voltar.png"
+        image: "resources/apagar.png"
+        sound: ""
         subItems: []
     }
     ListElement {
         name: "Apagar todas"
         cor: "white"
         type: "edit"
-        image: "resources/voltar.png"
+        image: "resources/apagarTodos.png"
+        sound: ""
         subItems: []
     }
     ListElement {
@@ -27,6 +30,7 @@ ListModel {
         cor: "white"
         type: "edit"
         image: "resources/voltar.png"
+        sound: ""
         subItems: []
     }
 }
