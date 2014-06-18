@@ -590,7 +590,9 @@ Rectangle {
             else if(tela_inicial.state === "QUADRADO_2") {
                 if(tela_inicial.acaoModel.get(1).type === "edit") {
                     tela_inicial.selecionados.remove(tela_inicial.selecionados.count - 1);
-                    path.decrementCurrentIndex();
+                    if(tela_inicial.selecionados > 2) {
+                        path.decrementCurrentIndex();
+                    }
                     if(tela_inicial.selecionados.count == 0) {
                         tela_inicial.acaoModel = tela_inicial.acaoModelBackup
                         tela_inicial.state = "EDIT"

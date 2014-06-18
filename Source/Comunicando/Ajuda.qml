@@ -37,22 +37,10 @@ ApplicationWindow {
     <b>[ 2 ]</b> para o modo de <b>Contagem Regressiva</b>.
 </p>
 
-<h4>1. Tempo de Escolha</h4>
+<h3>Tempo de Escolha</h3>
 <p>
     Você pode alterar o <b>Tempo de Escolha</b> para uma opção usando as teclas de seta para a <b>esquerda [ ← ]</b>
     para <b>diminuir o tempo</b> e para a <b>direita [ → ]</b> para <b>aumentar</b> o tempo de seleção.
-</p>
-
-<h4>2. Orientação das Imagens</h4>
-<p>
-    A <b>Orientação das Imagens</b> pode ser trocada usando as teclas <b>[ H ]</b> para que as imagens se movam no sentido
-    <b>Horizontal</b> ou <b>[ V ]</b> para que elas percorram o sentido <b>Vertical</b>.
-</p>
-
-<h4>3. Tamanho das Imagens</h4>
-<p>
-    O <b>Tamanho das Imagens</b> pode ser configurado usando as teclas <b>[ G ]</b> para aumenta-las ou <b>[ P ]</b> para
-    diminuí-las.
 </p>
 
 <h3>Barra de Status</h3>

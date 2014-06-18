@@ -10,22 +10,6 @@ ApplicationWindow {
     width: (Screen.desktopAvailableHeight * 4) / 5
     menuBar: MenuBar {
         Menu {
-            title: "Arquivo"
-
-            MenuItem {
-                text: "Editar Itens"
-                onTriggered: {
-                    loader.source = "Editar.qml"
-                }
-            }
-
-            MenuItem {
-                text: "Sair"
-                onTriggered: Qt.quit();
-            }
-        }
-
-        Menu {
             title: "Ajuda"
             MenuItem {
                 text: "Ajuda"
